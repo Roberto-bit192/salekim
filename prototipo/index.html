@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salekim · novo layout</title>
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Conceito: a roda. Três círculos concêntricos (indivíduo, grupo, organização) abrem o site;
+   o resto é uma coluna editorial calma. As duas folhas do logotipo viram as duas portas:
+   azul para empresas, laranja para pessoas. */
+:root{
+  --papel:#F6F6F0;      /* fundo, off-white com viés verde */
+  --superficie:#FFFFFF; /* formulários e cartões que pedem destaque */
+  --tinta:#16271D;      /* texto */
+  --tinta-suave:#4C5D52;/* texto secundário */
+  --verde:#003C24;      /* cor da marca */
+  --dourado:#A8721F;    /* acento, usado com parcimônia */
+  --azul:#00306C;       /* folha azul: empresas */
+  --laranja:#B45A17;    /* folha laranja: pessoas */
+  --linha:#D5DBCF;      /* fios e bordas */
+  --sobre-verde:#F6F6F0;/* texto sobre o verde */
+  --selo:#F6F6F0;       /* fundo do logotipo */
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --texto:"Hanken Grotesk",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --raio:10px;
+  --coluna:68rem;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --papel:#0E1A13;--superficie:#15241B;--tinta:#E9ECE4;--tinta-suave:#A9B6AC;--verde:#7FB596;
+  --dourado:#D9A24A;--azul:#8FB2E6;--laranja:#E8955A;--linha:#2A3B30;--sobre-verde:#0E1A13;--selo:#F6F6F0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --papel:#0E1A13;--superficie:#15241B;--tinta:#E9ECE4;--tinta-suave:#A9B6AC;--verde:#7FB596;
+  --dourado:#D9A24A;--azul:#8FB2E6;--laranja:#E8955A;--linha:#2A3B30;--sobre-verde:#0E1A13;--selo:#F6F6F0;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--papel);color:var(--tinta);font-family:var(--texto);font-size:1.0625rem;line-height:1.6;margin:0}
+a{color:var(--verde);text-underline-offset:.18em}
+a:hover{color:var(--dourado)}
+:focus-visible{outline:2px solid var(--dourado);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:400;color:var(--verde);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(2.1rem,4.6vw,3.4rem);font-weight:300}
+h2{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:300}
+h3{font-size:1.35rem}
+p{margin:0}
+.rotulo{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-suave);font-weight:600}
+.envoltorio{max-width:var(--coluna);margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.texto{max-width:40rem;display:grid;gap:1rem}
+.texto p{color:var(--tinta)}
+.discreto{color:var(--tinta-suave)}
+
+/* Faixa do protótipo */
+.faixa{background:var(--verde);color:var(--sobre-verde);font-size:.85rem}
+.faixa .envoltorio{display:flex;gap:.5rem 1rem;justify-content:space-between;align-items:center;flex-wrap:wrap;padding-block:.45rem}
+.faixa a{color:var(--sobre-verde);font-weight:600}
+
+/* Cabeçalho */
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--papel);border-bottom:1px solid var(--linha)}
+.topo .envoltorio{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.6rem}
+.marca{display:inline-flex;background:var(--selo);border-radius:8px;padding:.25rem .45rem}
+.marca img{height:46px;width:auto;display:block}
+.menu{display:flex;gap:.25rem;align-items:center;flex-wrap:wrap}
+.menu a{color:var(--tinta);text-decoration:none;padding:.45rem .65rem;border-radius:6px;font-size:.97rem}
+.menu a[aria-current="page"]{color:var(--verde);box-shadow:inset 0 -2px 0 var(--dourado);border-radius:0}
+.menu a:hover{color:var(--verde)}
+.topo .botao-menu{display:none}
+
+/* Botões */
+.botao{display:inline-flex;align-items:center;gap:.5rem;font:600 .98rem/1.2 var(--texto);padding:.8rem 1.2rem;border-radius:999px;border:1.5px solid var(--verde);background:var(--verde);color:var(--sobre-verde);text-decoration:none;cursor:pointer}
+.botao:hover{background:transparent;color:var(--verde)}
+.botao.contorno{background:transparent;color:var(--verde)}
+.botao.contorno:hover{background:var(--verde);color:var(--sobre-verde)}
+.botao.azul{background:var(--azul);border-color:var(--azul);color:var(--sobre-verde)}
+.botao.azul:hover{background:transparent;color:var(--azul)}
+.botao.laranja{background:var(--laranja);border-color:var(--laranja);color:var(--sobre-verde)}
+.botao.laranja:hover{background:transparent;color:var(--laranja)}
+.botao.pequeno{padding:.5rem .9rem;font-size:.9rem}
+.botao.topo-cta{padding:.55rem 1rem;font-size:.92rem}
+.acoes{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+.link-seta{font-weight:600;text-decoration:none}
+.link-seta::after{content:" →"}
+
+/* Seções */
+.secao{padding-block:clamp(3rem,7vw,5.5rem)}
+.secao + .secao{border-top:1px solid var(--linha)}
+.cabeca-secao{display:grid;gap:.6rem;margin-bottom:2rem;max-width:44rem}
+.pagina[hidden]{display:none}
+
+/* Abertura com a roda */
+.abertura{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:center;padding-block:clamp(2.5rem,6vw,4.5rem)}
+.abertura .texto{max-width:36rem;gap:1.25rem}
+.abertura .assinatura{font-family:var(--display);font-style:italic;font-size:1.25rem;color:var(--dourado)}
+.roda{width:100%;max-width:440px;justify-self:center}
+.roda svg{width:100%;height:auto;display:block;overflow:visible}
+.roda .anel{fill:none;stroke:var(--linha);stroke-width:1.2}
+.roda .anel.meio{stroke:var(--dourado);stroke-dasharray:2 7;stroke-linecap:round;stroke-width:2}
+.roda text{font-family:var(--texto);font-size:13px;letter-spacing:.22em;text-transform:uppercase;fill:var(--tinta-suave);font-weight:600}
+.roda .nucleo{fill:var(--superficie);stroke:var(--verde);stroke-width:1.5}
+.roda .ponto{fill:var(--verde)}
+.roda .ponto.d{fill:var(--dourado)}
+.roda figcaption{text-align:center;font-size:.9rem;color:var(--tinta-suave);margin-top:.5rem}
+@media (prefers-reduced-motion:no-preference){
+  .roda .giro{transform-origin:220px 220px;animation:giro 90s linear infinite}
+  @keyframes giro{to{transform:rotate(360deg)}}
+}
+
+.clientes-faixa{border-block:1px solid var(--linha);padding-block:1.25rem}
+.clientes-faixa .envoltorio{display:flex;gap:.5rem 1.5rem;flex-wrap:wrap;align-items:baseline}
+.clientes-faixa ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;font-family:var(--display);font-size:1.12rem;color:var(--tinta)}
+
+/* Duas portas */
+.portas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
+.porta{display:grid;gap:.9rem;align-content:start;padding:1.75rem;border-radius:var(--raio);background:var(--superficie);border:1px solid var(--linha);border-top:4px solid var(--azul)}
+.porta.pessoas{border-top-color:var(--laranja)}
+.porta h3{color:var(--azul)}
+.porta.pessoas h3{color:var(--laranja)}
+.porta ul{margin:0;padding-left:1.1rem;color:var(--tinta-suave);display:grid;gap:.2rem}
+.folha{width:22px;height:22px}
+
+/* Como trabalhamos */
+.niveis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;margin-bottom:2.5rem}
+.nivel{display:grid;gap:.4rem;padding-top:1rem;border-top:1px solid var(--linha)}
+.nivel h3{font-size:1.25rem}
+.passos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;counter-reset:passo}
+.passos li{counter-increment:passo;display:grid;gap:.4rem;align-content:start}
+.passos li::before{content:counter(passo);font-family:var(--display);font-size:2.4rem;line-height:1;color:var(--dourado);font-weight:300}
+.passos strong{font-family:var(--display);font-weight:500;font-size:1.2rem;color:var(--verde)}
+.tarefa-emocao{margin-top:2.5rem;padding:1.5rem 1.75rem;border-left:3px solid var(--dourado);font-family:var(--display);font-size:1.3rem;font-style:italic;max-width:46rem;color:var(--tinta)}
+
+/* Quem conduz */
+.conduz{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:clamp(1.5rem,4vw,3rem);align-items:start}
+.retrato{background:var(--superficie);border:1px solid var(--linha);border-radius:var(--raio);overflow:hidden;display:grid;place-items:end center;padding-top:1rem}
+.retrato img{width:100%;max-width:240px;height:auto;display:block}
+.credenciais{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.credenciais li{position:relative;padding-left:1.25rem}
+.credenciais li::before{content:"";position:absolute;left:0;top:.68em;width:7px;height:7px;border-radius:50%;background:var(--dourado)}
+
+/* Chamada final */
+.chamada{background:var(--verde);color:var(--sobre-verde);border-radius:var(--raio);padding:clamp(1.75rem,4vw,3rem);display:grid;gap:1.25rem}
+.chamada h2{color:var(--sobre-verde)}
+.chamada p{color:var(--sobre-verde);opacity:.9;max-width:40rem}
+.chamada .botao{background:var(--sobre-verde);color:var(--verde);border-color:var(--sobre-verde)}
+.chamada .botao:hover{background:transparent;color:var(--sobre-verde)}
+.chamada .botao.contorno{background:transparent;color:var(--sobre-verde)}
+.chamada .botao.contorno:hover{background:var(--sobre-verde);color:var(--verde)}
+
+/* Sobre: linha do tempo */
+.linha-tempo{list-style:none;margin:0;padding:0;display:grid;gap:0;max-width:48rem}
+.linha-tempo li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:1.25rem;padding-block:1.1rem;border-top:1px solid var(--linha)}
+.linha-tempo .quando{font-family:var(--display);color:var(--dourado);font-size:1.1rem;font-variant-numeric:tabular-nums}
+.linha-tempo strong{display:block;color:var(--verde);font-weight:600;margin-bottom:.2rem}
+.citacao{font-family:var(--display);font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:300;font-style:italic;color:var(--verde);max-width:42rem;line-height:1.3}
+.duas-colunas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5rem}
+.valores{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0;margin:0}
+.valores li{border:1px solid var(--linha);border-radius:999px;padding:.35rem .9rem;background:var(--superficie)}
+
+/* Serviços e programas */
+.servicos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
+.servico{display:grid;gap:.75rem;align-content:start;padding:1.5rem;border:1px solid var(--linha);border-radius:var(--raio);background:var(--superficie)}
+.servico h3{color:var(--azul)}
+.programas{display:grid;gap:0}
+.programa{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,15rem);gap:1rem 2rem;padding-block:1.75rem;border-top:1px solid var(--linha)}
+.programa:last-child{border-bottom:1px solid var(--linha)}
+.programa h3{color:var(--laranja)}
+.programa .publico{font-size:.95rem;color:var(--tinta-suave);font-style:italic}
+.programa .texto{gap:.6rem}
+.programa .acoes{flex-direction:column;align-items:stretch;align-self:center}
+.programa .acoes .botao{justify-content:center}
+.etiqueta{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .55rem;border-radius:999px;border:1px solid var(--laranja);color:var(--laranja);justify-self:start}
+.lista-clientes{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0 2rem}
+.lista-clientes li{padding-block:.85rem;border-top:1px solid var(--linha);font-family:var(--display);font-size:1.2rem}
+.lista-clientes small{display:block;font-family:var(--texto);font-size:.85rem;color:var(--tinta-suave)}
+
+/* Formulários */
+.formulario{display:grid;gap:1rem;background:var(--superficie);border:1px solid var(--linha);border-radius:var(--raio);padding:clamp(1.25rem,3vw,2rem);max-width:44rem}
+.campos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.campo{display:grid;gap:.35rem;min-width:0}
+.campo.inteiro{grid-column:1/-1}
+.campo label{font-size:.92rem;font-weight:600}
+.campo input,.campo select,.campo textarea{width:100%;font:inherit;font-size:1rem;padding:.7rem .8rem;border:1px solid var(--linha);border-radius:8px;background:var(--papel);color:var(--tinta)}
+.campo textarea{min-height:7rem;resize:vertical}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:2px solid var(--dourado);outline-offset:0;border-color:transparent}
+.campo .ajuda{font-size:.82rem;color:var(--tinta-suave)}
+.isca{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.consentimento{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.6rem;align-items:start;font-size:.93rem}
+.consentimento input{margin-top:.3rem;width:1.05rem;height:1.05rem;accent-color:var(--verde)}
+.aviso{padding:.85rem 1rem;border-radius:8px;border:1px solid var(--verde);background:var(--papel);font-size:.95rem}
+.aviso.erro{border-color:var(--laranja)}
+.seletor{display:inline-flex;border:1px solid var(--linha);border-radius:999px;padding:.25rem;background:var(--superficie);gap:.25rem;flex-wrap:wrap}
+.seletor button{font:600 .95rem var(--texto);border:0;background:transparent;color:var(--tinta);padding:.5rem 1rem;border-radius:999px;cursor:pointer}
+.seletor button[aria-pressed="true"]{background:var(--verde);color:var(--sobre-verde)}
+
+/* Contato */
+.contatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-bottom:2.5rem}
+.contato-item{display:grid;gap:.35rem;padding:1.1rem 1.25rem;border:1px solid var(--linha);border-radius:var(--raio);min-width:0}
+.contato-item .valor{font-family:var(--display);font-size:1.2rem;word-break:break-word;user-select:all}
+.contato-item .acoes{gap:.5rem}
+.copiar{font:600 .85rem var(--texto);background:none;border:1px solid var(--linha);border-radius:999px;padding:.3rem .75rem;color:var(--tinta);cursor:pointer}
+
+/* Notas da proposta */
+.notas h3{margin-top:2rem;margin-bottom:.75rem}
+.tabela{overflow-x:auto;border:1px solid var(--linha);border-radius:var(--raio);background:var(--superficie)}
+.tabela table{border-collapse:collapse;width:100%;min-width:44rem;font-size:.93rem}
+.tabela th,.tabela td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--linha)}
+.tabela th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-suave)}
+.tabela tr:last-child td{border-bottom:0}
+.estado{display:inline-block;font-size:.75rem;font-weight:600;padding:.1rem .5rem;border-radius:999px;white-space:nowrap}
+.estado.quebrado{background:var(--laranja);color:var(--sobre-verde)}
+.estado.ajuste{border:1px solid var(--dourado);color:var(--dourado)}
+.estado.ok{border:1px solid var(--verde);color:var(--verde)}
+del{color:var(--tinta-suave)}
+ins{text-decoration:none;color:var(--verde);font-weight:600}
+
+/* Rodapé */
+.rodape{background:var(--verde);color:var(--sobre-verde);padding-block:3rem 2rem;margin-top:3rem}
+.rodape a,.rodape button.link{color:var(--sobre-verde)}
+.rodape .colunas{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2rem}
+.rodape h2{font-size:1.05rem;font-family:var(--texto);font-weight:600;color:var(--sobre-verde);margin-bottom:.6rem;letter-spacing:.06em;text-transform:uppercase}
+.rodape ul{list-style:none;margin:0;padding:0;display:grid;gap:.35rem}
+.rodape .lema{font-family:var(--display);font-style:italic;font-size:1.5rem;font-weight:300}
+.rodape .base{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid color-mix(in srgb,var(--sobre-verde) 25%,transparent);font-size:.88rem;display:flex;gap:.5rem 1.25rem;flex-wrap:wrap;justify-content:space-between}
+button.link{background:none;border:0;padding:0;font:inherit;text-decoration:underline;text-underline-offset:.18em;cursor:pointer}
+
+/* Cookies e WhatsApp */
+.cookies{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:1rem 1rem calc(1rem + env(safe-area-inset-bottom,0px))}
+.cookies .caixa{max-width:46rem;margin-inline:auto;background:var(--superficie);border:1px solid var(--linha);border-radius:var(--raio);padding:1.1rem 1.25rem;box-shadow:0 10px 30px rgb(0 0 0 / .14);display:grid;gap:.9rem;font-size:.95rem}
+.whatsapp{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:inline-flex;align-items:center;gap:.5rem;background:var(--verde);color:var(--sobre-verde);text-decoration:none;font-weight:600;font-size:.92rem;padding:.7rem 1rem;border-radius:999px;box-shadow:0 6px 18px rgb(0 0 0 / .18)}
+.whatsapp:hover{color:var(--sobre-verde);background:var(--azul)}
+.whatsapp svg{width:20px;height:20px;fill:currentColor}
+
+@media (max-width:860px){
+  .topo .botao-menu{display:inline-flex}
+  .menu{display:none;position:absolute;left:0;right:0;top:100%;background:var(--papel);border-bottom:1px solid var(--linha);flex-direction:column;align-items:stretch;padding:.5rem 16px 1rem}
+  .menu.aberto{display:flex}
+  .menu a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--dourado)}
+  .topo .topo-cta{display:none}
+  .abertura,.conduz,.duas-colunas{grid-template-columns:minmax(0,1fr)}
+  .roda{max-width:300px}
+  .portas,.servicos,.campos,.contatos{grid-template-columns:minmax(0,1fr)}
+  .niveis,.passos{grid-template-columns:minmax(0,1fr)}
+  .programa{grid-template-columns:minmax(0,1fr)}
+  .programa .acoes{flex-direction:row;flex-wrap:wrap}
+  .rodape .colunas{grid-template-columns:minmax(0,1fr)}
+  .linha-tempo li{grid-template-columns:minmax(0,1fr);gap:.25rem}
+  .retrato{max-width:260px}
+  .whatsapp span{display:none}
+  .whatsapp{padding:.8rem}
+}
+</style>
+
+</head>
+<body>
+<div class="faixa" role="note">
+  <div class="envoltorio">
+    <span>Protótipo de layout para a SALEKIM. Os formulários não enviam mensagens.</span>
+    <a href="#notas">Ver notas da proposta e revisão dos botões</a>
+  </div>
+</div>
+
+<header class="topo">
+  <div class="envoltorio">
+    <a class="marca" href="#inicio" aria-label="SALEKIM, página inicial"><img src="imagens/logo.webp" alt="Salekim, desenvolvimento humano e organizacional" width="440" height="222"></a>
+    <button class="botao contorno pequeno botao-menu" id="botao-menu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav class="menu" id="menu" aria-label="Principal">
+      <a href="#inicio">Início</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#para-empresas">Para empresas</a>
+      <a href="#programas">Programas</a>
+      <a href="#clientes">Clientes</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="botao topo-cta" href="#contato">Fale com a Genira</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- ===================== INÍCIO ===================== -->
+<section class="pagina" id="pagina-inicio" data-pagina="inicio">
+  <div class="envoltorio abertura">
+    <div class="texto">
+      <p class="rotulo">Desenvolvimento humano e organizacional desde 1996</p>
+      <h1>Equipes engajadas e com foco em resultado começam em líderes que entendem de gente.</h1>
+      <p class="discreto">Há mais de 35 anos, a SALEKIM acompanha pessoas, equipes e organizações em processos de transformação, com uma metodologia vivencial apoiada no comportamento humano, na liderança e na gestão.</p>
+      <div class="acoes">
+        <a class="botao azul" href="#para-empresas">Sou de uma empresa</a>
+        <a class="botao laranja" href="#programas">Quero me desenvolver</a>
+      </div>
+      <p class="assinatura">Transformação com profundidade e leveza.</p>
+    </div>
+    <figure class="roda" style="margin:0">
+      <svg viewBox="-10 -10 460 460" role="img" aria-labelledby="roda-titulo">
+        <title id="roda-titulo">Três círculos concêntricos: organização, grupo e indivíduo, com Genira Rosa dos Santos ao centro.</title>
+        <defs>
+          <path id="c-org" d="M220,220 m-196,0 a196,196 0 1,1 392,0 a196,196 0 1,1 -392,0"/>
+          <path id="c-grupo" d="M220,220 m-142,0 a142,142 0 1,1 284,0 a142,142 0 1,1 -284,0"/>
+          <clipPath id="recorte"><circle cx="220" cy="220" r="92"/></clipPath>
+        </defs>
+        <circle class="anel" cx="220" cy="220" r="210"/>
+        <circle class="anel meio" cx="220" cy="220" r="156"/>
+        <g class="giro">
+          <text><textPath href="#c-org" startOffset="3%">organização · cultura · resultado</textPath></text>
+          <text><textPath href="#c-grupo" startOffset="8%">grupo · vínculo · tarefa</textPath></text>
+          <circle class="ponto" cx="220" cy="10" r="5"/>
+          <circle class="ponto d" cx="376" cy="220" r="5"/>
+          <circle class="ponto" cx="64" cy="220" r="5"/>
+          <circle class="ponto d" cx="220" cy="376" r="5"/>
+        </g>
+        <circle class="nucleo" cx="220" cy="220" r="94"/>
+        <image href="imagens/genira.webp" x="150" y="138" width="140" height="205" clip-path="url(#recorte)" preserveAspectRatio="xMidYMin meet"/>
+      </svg>
+      <figcaption>Indivíduo, grupo e organização, olhados ao mesmo tempo.</figcaption>
+    </figure>
+  </div>
+
+  <div class="clientes-faixa">
+    <div class="envoltorio">
+      <span class="rotulo">Empresas que confiaram no nosso trabalho</span>
+      <ul>
+        <li>Nestlé</li><li>Embraer</li><li>Faber-Castell</li><li>Vale</li><li>Roche</li><li>Santander</li><li>BASF</li><li>Votorantim</li><li>SEBRAE</li><li>SESC</li><li>Metrô de São Paulo</li>
+      </ul>
+      <a class="link-seta" href="#clientes">Ver todos</a>
+    </div>
+  </div>
+
+  <div class="envoltorio secao">
+    <div class="cabeca-secao">
+      <p class="rotulo">Por onde começar</p>
+      <h2>Dois caminhos, o mesmo cuidado com as pessoas.</h2>
+    </div>
+    <div class="portas">
+      <article class="porta">
+        <svg class="folha" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7 7 5 12 6 17c.6 3 3 5 6 5V9" fill="none" stroke="var(--azul)" stroke-width="2" stroke-linecap="round"/><path d="M12 22c-3 0-5.4-2-6-5-1-5 1-10 6-15 1.8 3.7 2.5 7 2 10" fill="var(--azul)" opacity=".25"/></svg>
+        <h3>Para empresas</h3>
+        <p>Para organizações de médio e grande porte que precisam transformar cultura, lideranças e equipes.</p>
+        <ul><li>Transformação organizacional</li><li>Desenvolvimento de lideranças e equipes</li><li>Palestras e workshops vivenciais</li></ul>
+        <div class="acoes"><a class="botao azul" href="#para-empresas">Conhecer as soluções</a></div>
+      </article>
+      <article class="porta pessoas">
+        <svg class="folha" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c5 5 7 10 6 15-.6 3-3 5-6 5V9" fill="none" stroke="var(--laranja)" stroke-width="2" stroke-linecap="round"/><path d="M12 22c3 0 5.4-2 6-5 1-5-1-10-6-15-1.8 3.7-2.5 7-2 10" fill="var(--laranja)" opacity=".25"/></svg>
+        <h3>Para pessoas</h3>
+        <p>Para quem quer se desenvolver, formar-se como facilitador de grupos ou construir um novo capítulo de vida.</p>
+        <ul><li>Formação, supervisão e mentoria para quem conduz grupos</li><li>Método VIDA, para a aposentadoria</li><li>Acompanhamento individual</li></ul>
+        <div class="acoes"><a class="botao laranja" href="#programas">Ver os programas</a></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="envoltorio secao">
+    <div class="cabeca-secao">
+      <p class="rotulo">Como trabalhamos</p>
+      <h2>A organização vista como um sistema, em três níveis ao mesmo tempo.</h2>
+    </div>
+    <div class="niveis">
+      <div class="nivel"><h3>Indivíduo</h3><p class="discreto">Autoconhecimento, habilidades interpessoais e o jeito de cada um liderar.</p></div>
+      <div class="nivel"><h3>Grupo</h3><p class="discreto">Vínculos, comunicação e a forma como a equipe se organiza para a tarefa.</p></div>
+      <div class="nivel"><h3>Organização</h3><p class="discreto">Cultura, o conjunto de práticas do dia a dia, que muda o ambiente e é mudada por ele.</p></div>
+    </div>
+    <ol class="passos" aria-label="Etapas do trabalho">
+      <li><strong>Diagnóstico cuidadoso</strong><span class="discreto">Entender o sistema antes de propor qualquer intervenção.</span></li>
+      <li><strong>Intervenção vivencial</strong><span class="discreto">Metodologias ativas, baseadas na educação de adultos: o aprendizado parte da experiência de quem participa.</span></li>
+      <li><strong>Acompanhamento próximo</strong><span class="discreto">Presença ao longo do processo, para que a mudança se sustente.</span></li>
+    </ol>
+    <p class="tarefa-emocao">O desafio é juntar duas dimensões que as empresas costumam tratar separadamente: a tarefa e a emoção de quem executa a tarefa.</p>
+  </div>
+
+  <div class="envoltorio secao">
+    <div class="conduz">
+      <div class="retrato"><img src="imagens/genira.webp" alt="Genira Rosa dos Santos, sócia e consultora da SALEKIM" width="257" height="376"></div>
+      <div class="texto">
+        <p class="rotulo">Quem conduz</p>
+        <h2>Genira Rosa dos Santos</h2>
+        <p>Comecei desenhando processos. Foi assim que descobri que quem sustenta um processo são as pessoas.</p>
+        <ul class="credenciais">
+          <li>Mestre em educação pela Universidade Católica de Santos</li>
+          <li>Didata e docente da Sociedade Brasileira de Dinâmica dos Grupos (SBDG)</li>
+          <li>Formação em executive coach e life coach pelo Integrated Coaching Institute</li>
+          <li>Coautora do livro <em>Manual de múltiplas inteligências</em></li>
+        </ul>
+        <div class="acoes"><a class="link-seta" href="#sobre">Conhecer a trajetória</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="envoltorio" style="padding-bottom:1rem">
+    <div class="chamada">
+      <h2>Vamos conversar sobre o seu desafio?</h2>
+      <p>Conte o que a sua equipe ou você está vivendo. A Genira responde pessoalmente.</p>
+      <div class="acoes">
+        <a class="botao" href="#para-empresas" data-ir-para="form-empresa">Pedir proposta para empresa</a>
+        <a class="botao contorno" href="#programas" data-ir-para="form-pessoa">Saber mais sobre os programas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOBRE ===================== -->
+<section class="pagina" id="pagina-sobre" data-pagina="sobre" hidden>
+  <div class="envoltorio secao">
+    <div class="conduz">
+      <div class="retrato"><img src="imagens/genira.webp" alt="Genira Rosa dos Santos" width="257" height="376"></div>
+      <div class="texto">
+        <p class="rotulo">Sobre</p>
+        <h1>Do desenho de processos ao cuidado com as pessoas.</h1>
+        <p class="citacao">“Comecei desenhando processos. Foi assim que descobri que quem sustenta um processo são as pessoas.”</p>
+        <p class="discreto">Genira Rosa dos Santos, fundadora da SALEKIM</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="envoltorio secao">
+    <div class="cabeca-secao"><p class="rotulo">A minha história</p><h2>Uma transição de carreira que virou método.</h2></div>
+    <ol class="linha-tempo">
+      <li><span class="quando">Início</span><div><strong>Organização e métodos na siderurgia</strong>Meu primeiro trabalho foi numa indústria siderúrgica, como secretária de um departamento de organização e métodos. Cinco anos depois, já formada em administração, fui promovida a analista da área. Escrevia normas, procedimentos e fluxos de trabalho.</div></li>
+      <li><span class="quando">Depois</span><div><strong>Bancos, editora, construtora e colégio</strong>Fui analista e coordenadora de projetos de organização, sistemas e métodos em bancos. Em seguida, diretora administrativa de uma editora, gerente de desenvolvimento organizacional de uma construtora e gerente administrativa de um colégio.</div></li>
+      <li><span class="quando">A virada</span><div><strong>Facilitação de processos grupais</strong>Numa formação em nível de pós-graduação para facilitadora de processos grupais, percebi que os processos que eu desenhava não se sustentavam porque ninguém cuidava das pessoas que iam executá-los. O desenho estava certo. Faltava trabalhar com quem ia colocá-lo em prática. Era com pessoas, e não com fluxos, que estavam o meu talento e o meu prazer.</div></li>
+      <li><span class="quando">1990</span><div><strong>Consultora comportamental</strong>Comecei a conduzir projetos de mudança de cultura em organizações que buscavam excelência nos processos.</div></li>
+      <li><span class="quando">1996</span><div><strong>Fundação da SALEKIM</strong>Foi a transição de carreira mais importante da minha vida, e não foi simples. Precisei construir um novo jeito de enxergar o trabalho, uma nova identidade profissional e um método próprio. Fui estudar psicologia, aprender ferramentas novas e entender o comportamento humano por dentro.</div></li>
+      <li><span class="quando">Mestrado</span><div><strong>Base acadêmica em educação</strong>Para aprofundar a base acadêmica, fiz o mestrado em educação. A metodologia da SALEKIM foi tomando forma, fundamentada em teóricos de diferentes campos, e passei a ajudar outros profissionais a construir o próprio caminho.</div></li>
+      <li><span class="quando">Hoje</span><div><strong>Continuo aprendendo</strong>Estudo neurociência e o uso da inteligência artificial no desenvolvimento de pessoas. Em cada trabalho, busco a mesma coisa: transformação com profundidade e leveza.</div></li>
+    </ol>
+  </div>
+
+  <div class="envoltorio secao">
+    <div class="duas-colunas">
+      <div class="texto">
+        <p class="rotulo">Formação</p>
+        <ul class="credenciais">
+          <li>Mestre em educação e graduada em administração pela Universidade Católica de Santos (UNISANTOS), onde foi pesquisadora do grupo “Formação de sujeitos: história, cultura, sociedade”</li>
+          <li>Especialista em desenvolvimento de grupos pela Sociedade Brasileira de Dinâmica dos Grupos (SBDG), onde é didata e docente dos cursos de formação, pós-graduação e educação continuada, e onde já ocupou cargos de direção e de conselheira</li>
+          <li>Formação em executive coach e life coach pelo Integrated Coaching Institute (ICI)</li>
+          <li>Formação em psicoterapias reichianas e outras abordagens psicoterapêuticas</li>
+          <li>Palestrante em eventos nacionais e internacionais de educação, processos grupais, psicoterapia, administração, gestão e liderança</li>
+          <li>Coautora do livro <em>Manual de múltiplas inteligências</em>, com publicações nos anais de congressos e nas revistas da SBDG</li>
+        </ul>
+      </div>
+      <div class="texto">
+        <p class="rotulo">Nosso propósito</p>
+        <p class="citacao" style="font-size:1.45rem">Ajudar líderes e gestores no maior desafio de qualquer organização: formar equipes engajadas e com foco em resultado.</p>
+        <p class="rotulo" style="margin-top:1rem">Nossa prática</p>
+        <p>Toda organização muda o ambiente em que atua e é mudada por ele. Essa troca afeta a vida pessoal e profissional de quem trabalha ali, e por isso a cultura pede atenção contínua. Olhamos para a organização como um sistema, em três níveis: o indivíduo, o grupo e a organização.</p>
+        <p>Usamos metodologias ativas, baseadas nos princípios da educação de adultos. O aprendizado parte da experiência de quem participa.</p>
+        <p class="rotulo" style="margin-top:1rem">Nossos valores</p>
+        <ul class="valores"><li>Respeito às pessoas</li><li>Profissionalismo</li><li>Parceria com o cliente</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="envoltorio" style="padding-bottom:1rem">
+    <div class="chamada">
+      <h2>Quer trabalhar com a Genira?</h2>
+      <div class="acoes">
+        <a class="botao" href="#para-empresas" data-ir-para="form-empresa">Pedir proposta para empresa</a>
+        <a class="botao contorno" href="#programas">Ver os programas para pessoas</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARA EMPRESAS ===================== -->
+<section class="pagina" id="pagina-para-empresas" data-pagina="para-empresas" hidden>
+  <div class="envoltorio secao">
+    <div class="cabeca-secao">
+      <p class="rotulo">Para empresas</p>
+      <h1>Culturas saudáveis, lideranças consistentes e equipes engajadas.</h1>
+      <p class="discreto">Apoiamos organizações de médio e grande porte em processos que cuidam, ao mesmo tempo, da tarefa e de quem a executa.</p>
+    </div>
+    <div class="servicos">
+      <article class="servico"><h3>Transformação organizacional</h3><p>Processos de mudança de cultura nos sistemas técnico e humano da organização, para que a transformação seja sustentável e gere resultados.</p><div class="acoes"><a class="botao azul pequeno" href="#para-empresas" data-ir-para="form-empresa" data-assunto="Transformação organizacional">Pedir proposta</a></div></article>
+      <article class="servico"><h3>Desenvolvimento de lideranças e equipes</h3><p>Programas para líderes e equipes, com foco em gestão de gente, comunicação e clima para resultado.</p><div class="acoes"><a class="botao azul pequeno" href="#para-empresas" data-ir-para="form-empresa" data-assunto="Desenvolvimento de lideranças e equipes">Pedir proposta</a></div></article>
+      <article class="servico"><h3>Palestras</h3><p>Palestras em congressos e eventos corporativos sobre desenvolvimento humano, liderança e cultura organizacional.</p><div class="acoes"><a class="botao azul pequeno" href="#para-empresas" data-ir-para="form-empresa" data-assunto="Palestra">Pedir proposta</a></div></article>
+      <article class="servico"><h3>Workshops</h3><p>Workshops vivenciais e práticos para equipes e grupos, desenhados sob medida para cada demanda.</p><div class="acoes"><a class="botao azul pequeno" href="#para-empresas" data-ir-para="form-empresa" data-assunto="Workshop">Pedir proposta</a></div></article>
+    </div>
+  </div>
+  <div class="envoltorio secao" id="form-empresa">
+    <div class="cabeca-secao"><p class="rotulo">Pedir proposta</p><h2>Conte o desafio da sua organização.</h2><p class="discreto">Você recebe uma proposta personalizada da SALEKIM.</p></div>
+    <form class="formulario" aria-label="Pedir proposta">
+  <div class="isca" aria-hidden="true"><label for="empresa-site">Deixe este campo vazio</label><input class="isca-campo" id="empresa-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="campos">
+    <div class="campo"><label for="empresa-nome">Nome *</label><input id="empresa-nome" name="nome" type="text" required autocomplete="name"></div>
+    <div class="campo"><label for="empresa-email">E-mail *</label><input id="empresa-email" name="email" type="email" required autocomplete="email"></div>
+    <div class="campo"><label for="empresa-telefone">Telefone ou WhatsApp *</label><input id="empresa-telefone" name="telefone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="(11) 99914-3277"></div>
+    <div class="campo"><label for="empresa-empresa">Empresa</label><input id="empresa-empresa" name="empresa" type="text" autocomplete="organization"></div><div class="campo"><label for="empresa-assunto">Assunto</label><select id="empresa-assunto" name="assunto"><option value="">Escolha, se quiser</option><option value="Transformação organizacional">Transformação organizacional</option><option value="Desenvolvimento de lideranças e equipes">Desenvolvimento de lideranças e equipes</option><option value="Palestra">Palestra</option><option value="Workshop">Workshop</option><option value="Outro assunto">Outro assunto</option></select></div>
+    <div class="campo inteiro"><label for="empresa-mensagem">Mensagem</label><textarea id="empresa-mensagem" name="mensagem"></textarea><span class="ajuda">Conte o contexto, o tamanho da equipe e o prazo, se já souber.</span></div>
+  </div>
+  <label class="consentimento" for="empresa-lgpd"><input id="empresa-lgpd" name="lgpd" type="checkbox" required><span>Autorizo o uso dos meus dados para contato sobre esta solicitação, conforme a <a href="#privacidade">política de privacidade</a>. *</span></label>
+  <div class="acoes"><button class="botao" type="submit">Pedir proposta</button></div>
+  <p class="aviso" role="status" aria-live="polite" hidden></p>
+</form>
+  </div>
+</section>
+
+<!-- ===================== PROGRAMAS ===================== -->
+<section class="pagina" id="pagina-programas" data-pagina="programas" hidden>
+  <div class="envoltorio secao">
+    <div class="cabeca-secao">
+      <p class="rotulo">Programas para pessoas</p>
+      <h1>Para se desenvolver, conduzir grupos ou começar um novo capítulo.</h1>
+      <p class="discreto">Escolha um programa e peça mais informações. Se preferir, fale direto com a Genira pelo WhatsApp.</p>
+    </div>
+    <div class="programas">
+      <article class="programa"><div class="texto"><h3>Método VIDA</h3><p class="publico">Para quem está se aposentando ou já se aposentou.</p><p>Quem se aposenta sem um plano costuma passar os primeiros anos preenchendo o tempo em vez de escolher o que fazer com ele. Em 45 dias, você sai com um plano de vida para essa fase: o que fazer com o seu tempo, a sua renda e o seu propósito. São 8 encontros guiados pelas etapas visão, identidade, direção e ação, com o caderno de jornada como apoio.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="Método VIDA">Quero saber mais</a><a class="botao contorno pequeno" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%2C%20Genira!%20Quero%20saber%20mais%20sobre%20o%20M%C3%A9todo%20VIDA.">Conversar pelo WhatsApp</a></div></article>
+      <article class="programa"><div class="texto"><h3>Formação em desenvolvimento de grupos</h3><p class="publico">Para psicólogos, profissionais de RH, educadores e consultores que conduzem grupos.</p><p>Formação para conduzir grupos com fundamento teórico e prática supervisionada, em parceria com a SBDG, instituição em que a Genira é didata e docente. O estudo passa por autores como Lewin, Bion, Pichon-Rivière, Schutz, Bleger e Zimerman, sempre ligado à prática com grupos reais.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="Formação em desenvolvimento de grupos">Quero saber mais</a><a class="botao contorno pequeno" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%2C%20Genira!%20Quero%20saber%20mais%20sobre%20a%20Forma%C3%A7%C3%A3o%20em%20desenvolvimento%20de%20grupos.">Conversar pelo WhatsApp</a></div></article>
+      <article class="programa"><div class="texto"><span class="etiqueta">Lista de espera</span><h3>Programa InterAgir</h3><p class="publico">Online e ao vivo, em parceria com a SBDG.</p><p>Programa para quem conduz ou vai conduzir grupos.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="Programa InterAgir">Entrar na lista de espera</a></div></article>
+      <article class="programa"><div class="texto"><span class="etiqueta">Lista de espera</span><h3>DNA: mentoria para consultores comportamentais</h3><p class="publico">Para consultores comportamentais, profissionais de RH, líderes e gestores que atendem clientes com ferramentas comportamentais.</p><p>Um método próprio funciona como uma estrutura flexível, que se adapta a cada cliente sem perder o rumo. Na mentoria, você organiza a sua experiência nesse método, e o seu cliente passa a enxergar, etapa por etapa, o resultado que está construindo.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="DNA: mentoria para consultores comportamentais">Entrar na lista de espera</a></div></article>
+      <article class="programa"><div class="texto"><h3>Supervisão para facilitadores de grupo</h3><p class="publico">Para profissionais formados em desenvolvimento de grupos.</p><p>Espaço para discutir os grupos que você conduz com uma supervisora com mais de 35 anos de prática. Os casos reais viram aprendizado técnico e cuidado com o próprio facilitador.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="Supervisão para facilitadores de grupo">Quero saber mais</a><a class="botao contorno pequeno" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%2C%20Genira!%20Quero%20saber%20mais%20sobre%20a%20Supervis%C3%A3o%20para%20facilitadores%20de%20grupo.">Conversar pelo WhatsApp</a></div></article>
+      <article class="programa"><div class="texto"><h3>Acompanhamento individual</h3><p class="publico">Para líderes e profissionais em momento de decisão de carreira ou de vida.</p><p>Processo individual de desenvolvimento, com foco em autoconhecimento e habilidades interpessoais.</p></div><div class="acoes"><a class="botao laranja" href="#programas" data-ir-para="form-pessoa" data-programa="Acompanhamento individual">Quero saber mais</a><a class="botao contorno pequeno" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%2C%20Genira!%20Quero%20saber%20mais%20sobre%20o%20Acompanhamento%20individual.">Conversar pelo WhatsApp</a></div></article>
+    </div>
+  </div>
+  <div class="envoltorio secao" id="form-pessoa">
+    <div class="cabeca-secao"><p class="rotulo">Saber mais ou entrar na lista de espera</p><h2>Deixe seu contato e a Genira fala com você.</h2><p class="discreto">Em dúvida sobre qual programa faz sentido? Deixe o campo do programa em branco e conte um pouco sobre o seu momento.</p></div>
+    <form class="formulario" aria-label="Saber mais sobre os programas">
+  <div class="isca" aria-hidden="true"><label for="pessoa-site">Deixe este campo vazio</label><input class="isca-campo" id="pessoa-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="campos">
+    <div class="campo"><label for="pessoa-nome">Nome *</label><input id="pessoa-nome" name="nome" type="text" required autocomplete="name"></div>
+    <div class="campo"><label for="pessoa-email">E-mail *</label><input id="pessoa-email" name="email" type="email" required autocomplete="email"></div>
+    <div class="campo"><label for="pessoa-telefone">Telefone ou WhatsApp *</label><input id="pessoa-telefone" name="telefone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="(11) 99914-3277"></div>
+    <div class="campo inteiro"><label for="pessoa-programa">Programa de interesse</label><select id="pessoa-programa" name="programa"><option value="">Ainda não sei</option><option value="Método VIDA">Método VIDA</option><option value="Formação em desenvolvimento de grupos">Formação em desenvolvimento de grupos</option><option value="Programa InterAgir">Programa InterAgir</option><option value="DNA: mentoria para consultores comportamentais">DNA: mentoria para consultores comportamentais</option><option value="Supervisão para facilitadores de grupo">Supervisão para facilitadores de grupo</option><option value="Acompanhamento individual">Acompanhamento individual</option></select></div>
+    <div class="campo inteiro"><label for="pessoa-mensagem">Mensagem</label><textarea id="pessoa-mensagem" name="mensagem"></textarea><span class="ajuda">Conte um pouco sobre o seu momento.</span></div>
+  </div>
+  <label class="consentimento" for="pessoa-lgpd"><input id="pessoa-lgpd" name="lgpd" type="checkbox" required><span>Autorizo o uso dos meus dados para contato sobre esta solicitação, conforme a <a href="#privacidade">política de privacidade</a>. *</span></label>
+  <div class="acoes"><button class="botao" type="submit">Enviar</button></div>
+  <p class="aviso" role="status" aria-live="polite" hidden></p>
+</form>
+  </div>
+</section>
+
+<!-- ===================== CLIENTES ===================== -->
+<section class="pagina" id="pagina-clientes" data-pagina="clientes" hidden>
+  <div class="envoltorio secao">
+    <div class="cabeca-secao"><p class="rotulo">Clientes</p><h1>Empresas que confiaram no nosso trabalho.</h1></div>
+    <ul class="lista-clientes">
+      <li>Nestlé<small>Brasil, Colômbia, Venezuela e Equador</small></li>
+      <li>Embraer</li><li>Faber-Castell</li><li>Vale</li><li>Roche</li><li>Santander</li><li>BASF</li><li>Votorantim</li><li>SEBRAE</li><li>SESC</li><li>Metrô de São Paulo</li>
+      <li>E outras organizações<small>de médio e grande porte</small></li>
+    </ul>
+  </div>
+  <div class="envoltorio" style="padding-bottom:1rem">
+    <div class="chamada">
+      <h2>A sua empresa pode ser a próxima.</h2>
+      <p>Conte o desafio da sua organização e receba uma proposta personalizada.</p>
+      <div class="acoes"><a class="botao" href="#para-empresas" data-ir-para="form-empresa">Pedir proposta</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTATO ===================== -->
+<section class="pagina" id="pagina-contato" data-pagina="contato" hidden>
+  <div class="envoltorio secao">
+    <div class="cabeca-secao"><p class="rotulo">Contato</p><h1>Fale com a SALEKIM.</h1><p class="discreto">Respondemos com atenção a cada mensagem.</p></div>
+    <div class="contatos">
+      <div class="contato-item"><span class="rotulo">E-mail</span><span class="valor" id="v-email">genira@salekim.com.br</span><div class="acoes"><a class="link-seta" href="mailto:genira@salekim.com.br">Escrever</a><button class="copiar" type="button" data-copiar="v-email">Copiar</button></div></div>
+      <div class="contato-item"><span class="rotulo">WhatsApp</span><span class="valor" id="v-whats">(11) 99914-3277</span><div class="acoes"><a class="link-seta" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20SALEKIM%20e%20gostaria%20de%20saber%20mais.">Abrir conversa</a><button class="copiar" type="button" data-copiar="v-whats">Copiar</button></div></div>
+      <div class="contato-item"><span class="rotulo">Instagram</span><span class="valor">@genirarosa</span><div class="acoes"><a class="link-seta" target="_blank" rel="noopener" href="https://www.instagram.com/genirarosa">Abrir perfil</a></div></div>
+    </div>
+    <div class="cabeca-secao"><h2>Como podemos ajudar?</h2></div>
+    <div class="seletor" role="group" aria-label="Tipo de contato">
+      <button type="button" id="sel-empresa" aria-pressed="true">Sou de uma empresa</button>
+      <button type="button" id="sel-pessoa" aria-pressed="false">Quero me desenvolver</button>
+    </div>
+    <div style="margin-top:1.25rem" id="contato-empresa"><form class="formulario" aria-label="Pedir proposta">
+  <div class="isca" aria-hidden="true"><label for="c-empresa-site">Deixe este campo vazio</label><input class="isca-campo" id="c-empresa-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="campos">
+    <div class="campo"><label for="c-empresa-nome">Nome *</label><input id="c-empresa-nome" name="nome" type="text" required autocomplete="name"></div>
+    <div class="campo"><label for="c-empresa-email">E-mail *</label><input id="c-empresa-email" name="email" type="email" required autocomplete="email"></div>
+    <div class="campo"><label for="c-empresa-telefone">Telefone ou WhatsApp *</label><input id="c-empresa-telefone" name="telefone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="(11) 99914-3277"></div>
+    <div class="campo"><label for="c-empresa-empresa">Empresa</label><input id="c-empresa-empresa" name="empresa" type="text" autocomplete="organization"></div><div class="campo"><label for="c-empresa-assunto">Assunto</label><select id="c-empresa-assunto" name="assunto"><option value="">Escolha, se quiser</option><option value="Transformação organizacional">Transformação organizacional</option><option value="Desenvolvimento de lideranças e equipes">Desenvolvimento de lideranças e equipes</option><option value="Palestra">Palestra</option><option value="Workshop">Workshop</option><option value="Outro assunto">Outro assunto</option></select></div>
+    <div class="campo inteiro"><label for="c-empresa-mensagem">Mensagem</label><textarea id="c-empresa-mensagem" name="mensagem"></textarea><span class="ajuda">Conte o contexto, o tamanho da equipe e o prazo, se já souber.</span></div>
+  </div>
+  <label class="consentimento" for="c-empresa-lgpd"><input id="c-empresa-lgpd" name="lgpd" type="checkbox" required><span>Autorizo o uso dos meus dados para contato sobre esta solicitação, conforme a <a href="#privacidade">política de privacidade</a>. *</span></label>
+  <div class="acoes"><button class="botao" type="submit">Pedir proposta</button></div>
+  <p class="aviso" role="status" aria-live="polite" hidden></p>
+</form></div>
+    <div style="margin-top:1.25rem" id="contato-pessoa" hidden><form class="formulario" aria-label="Saber mais sobre os programas">
+  <div class="isca" aria-hidden="true"><label for="c-pessoa-site">Deixe este campo vazio</label><input class="isca-campo" id="c-pessoa-site" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="campos">
+    <div class="campo"><label for="c-pessoa-nome">Nome *</label><input id="c-pessoa-nome" name="nome" type="text" required autocomplete="name"></div>
+    <div class="campo"><label for="c-pessoa-email">E-mail *</label><input id="c-pessoa-email" name="email" type="email" required autocomplete="email"></div>
+    <div class="campo"><label for="c-pessoa-telefone">Telefone ou WhatsApp *</label><input id="c-pessoa-telefone" name="telefone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="(11) 99914-3277"></div>
+    <div class="campo inteiro"><label for="c-pessoa-programa">Programa de interesse</label><select id="c-pessoa-programa" name="programa"><option value="">Ainda não sei</option><option value="Método VIDA">Método VIDA</option><option value="Formação em desenvolvimento de grupos">Formação em desenvolvimento de grupos</option><option value="Programa InterAgir">Programa InterAgir</option><option value="DNA: mentoria para consultores comportamentais">DNA: mentoria para consultores comportamentais</option><option value="Supervisão para facilitadores de grupo">Supervisão para facilitadores de grupo</option><option value="Acompanhamento individual">Acompanhamento individual</option></select></div>
+    <div class="campo inteiro"><label for="c-pessoa-mensagem">Mensagem</label><textarea id="c-pessoa-mensagem" name="mensagem"></textarea><span class="ajuda">Conte um pouco sobre o seu momento.</span></div>
+  </div>
+  <label class="consentimento" for="c-pessoa-lgpd"><input id="c-pessoa-lgpd" name="lgpd" type="checkbox" required><span>Autorizo o uso dos meus dados para contato sobre esta solicitação, conforme a <a href="#privacidade">política de privacidade</a>. *</span></label>
+  <div class="acoes"><button class="botao" type="submit">Enviar</button></div>
+  <p class="aviso" role="status" aria-live="polite" hidden></p>
+</form></div>
+  </div>
+</section>
+
+<!-- ===================== PRIVACIDADE ===================== -->
+<section class="pagina" id="pagina-privacidade" data-pagina="privacidade" hidden>
+  <div class="envoltorio secao">
+    <div class="texto">
+      <p class="rotulo">Política de privacidade</p>
+      <h1>Como tratamos os seus dados.</h1>
+      <p>Esta política descreve como a SALEKIM Treinamento e Desenvolvimento Ltda. (CNPJ 01.134.015/0001-05) trata os dados pessoais coletados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+      <h3>1. Dados coletados</h3><p>Coletamos apenas os dados que você nos envia pelos formulários do site (nome, e-mail, telefone, empresa e mensagem) e dados de navegação anônimos para estatísticas, quando você aceita os cookies de medição.</p>
+      <h3>2. Finalidade</h3><p>Os dados enviados pelos formulários são usados exclusivamente para responder ao seu contato, enviar proposta ou inscrição em programas. Não vendemos, alugamos ou compartilhamos seus dados com terceiros.</p>
+      <h3>3. Cookies</h3><p>Usamos cookies essenciais para o funcionamento do site e, com o seu consentimento, cookies de medição (Google Analytics e Meta Pixel). Você pode mudar a sua escolha a qualquer momento em <button class="link" type="button" data-abrir-cookies>preferências de cookies</button>, também disponível no rodapé.</p>
+      <h3>4. Armazenamento e segurança</h3><p>Os dados são armazenados em servidores seguros e acessados somente por pessoas autorizadas da SALEKIM. Mantemos os dados apenas pelo tempo necessário à finalidade do contato.</p>
+      <h3>5. Seus direitos</h3><p>Você pode solicitar a qualquer momento o acesso, a correção ou a exclusão dos seus dados pelo e-mail genira@salekim.com.br.</p>
+      <h3>6. Contato</h3><p>SALEKIM Treinamento e Desenvolvimento Ltda., CNPJ 01.134.015/0001-05, São Vicente/SP. E-mail: genira@salekim.com.br.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NOTAS DA PROPOSTA ===================== -->
+<section class="pagina notas" id="pagina-notas" data-pagina="notas" hidden>
+  <div class="envoltorio secao">
+    <div class="cabeca-secao">
+      <p class="rotulo">Notas da proposta</p>
+      <h1>Por que este layout combina com a Genira.</h1>
+      <p class="discreto">Leitura do perfil publicado em salekim.com.br/sobre, em 6 de outubro de 2026, e revisão de todos os botões do site atual.</p>
+    </div>
+    <div class="texto">
+      <h3>O que o perfil diz e como o layout responde</h3>
+      <ul class="credenciais">
+        <li><span><strong>Facilitadora de grupos, didata da SBDG.</strong> A abertura mostra a roda: três círculos (indivíduo, grupo, organização) com a Genira ao centro. É a imagem que o próprio texto dela usa para descrever a prática.</span></li>
+        <li><span><strong>Veio dos processos para as pessoas.</strong> A página Sobre virou uma linha do tempo, da siderurgia à SALEKIM, porque a transição de carreira é o argumento central da trajetória.</span></li>
+        <li><span><strong>Tarefa e emoção juntas.</strong> A seção “Como trabalhamos” traz os três níveis, as três etapas (diagnóstico, intervenção vivencial, acompanhamento) e a frase sobre tarefa e emoção em destaque.</span></li>
+        <li><span><strong>Profundidade e leveza.</strong> Tipografia serifada leve para títulos, muito espaço em branco, uma única animação lenta na roda (desligada para quem prefere menos movimento).</span></li>
+        <li><span><strong>Dois públicos.</strong> As duas folhas do logotipo viram as duas portas: azul para empresas, laranja para pessoas. As cores se repetem nos botões de cada caminho, então o visitante sabe sempre onde está.</span></li>
+        <li><span><strong>Credibilidade sem exagero.</strong> Os clientes aparecem logo abaixo da abertura. A seção de depoimentos vazia saiu da página inicial e volta quando houver depoimentos autorizados.</span></li>
+      </ul>
+
+      <h3>Uso de maiúsculas</h3>
+      <p>Maiúscula só no início da frase e em nomes próprios (pessoas, empresas, instituições, cidades e nomes de programas próprios como Método VIDA e InterAgir). Principais mudanças:</p>
+    </div>
+    <div class="tabela" style="margin-top:1rem">
+      <table>
+        <thead><tr><th>Onde</th><th>Antes</th><th>Depois</th></tr></thead>
+        <tbody>
+          <tr><td>Menu e títulos</td><td><del>Para Empresas</del>, <del>Para Pessoas</del></td><td><ins>Para empresas</ins>, <ins>Para pessoas</ins></td></tr>
+          <tr><td>Rodapé, aviso de cookies, formulários</td><td><del>Política de Privacidade</del></td><td><ins>Política de privacidade</ins></td></tr>
+          <tr><td>Para empresas</td><td><del>Transformação Organizacional</del>, <del>Desenvolvimento de Lideranças e Equipes</del></td><td><ins>Transformação organizacional</ins>, <ins>Desenvolvimento de lideranças e equipes</ins></td></tr>
+          <tr><td>Programas</td><td><del>Formação em Desenvolvimento de Grupos</del>, <del>DNA: Mentoria para Consultores Comportamentais</del>, <del>Supervisão para Facilitadores de Grupo</del>, <del>Acompanhamento Individual</del></td><td><ins>Formação em desenvolvimento de grupos</ins>, <ins>DNA: mentoria para consultores comportamentais</ins>, <ins>Supervisão para facilitadores de grupo</ins>, <ins>Acompanhamento individual</ins></td></tr>
+          <tr><td>Método VIDA</td><td><del>etapas Visão, Identidade, Direção e Ação, com o Caderno de Jornada</del></td><td><ins>etapas visão, identidade, direção e ação, com o caderno de jornada</ins></td></tr>
+          <tr><td>Sobre: história</td><td><del>Organização e Métodos</del>, <del>Administração</del>, <del>Organização, Sistemas e Métodos</del>, <del>Desenvolvimento Organizacional</del>, <del>Educação</del></td><td><ins>organização e métodos</ins>, <ins>administração</ins>, <ins>organização, sistemas e métodos</ins>, <ins>desenvolvimento organizacional</ins>, <ins>educação</ins></td></tr>
+          <tr><td>Sobre: formação</td><td><del>Mestre em Educação</del>, <del>Desenvolvimento de Grupos</del>, <del>Executive Coach e Life Coach</del>, <del>Psicoterapias Reichianas</del>, <del>Educação, Processos Grupais, Psicoterapia, Administração, Gestão e Liderança</del></td><td><ins>mestre em educação</ins>, <ins>desenvolvimento de grupos</ins>, <ins>executive coach e life coach</ins>, <ins>psicoterapias reichianas</ins>, <ins>educação, processos grupais, psicoterapia, administração, gestão e liderança</ins></td></tr>
+          <tr><td>Títulos de obra e de grupo de pesquisa</td><td><del>Manual de Múltiplas Inteligências</del>, <del>Formação de Sujeitos: História, Cultura, Sociedade</del></td><td><ins>Manual de múltiplas inteligências</ins>, <ins>Formação de sujeitos: história, cultura, sociedade</ins> (padrão ABNT)</td></tr>
+          <tr><td>Formulário de contato</td><td><del>DNA — Mentoria</del>, <del>Coaching (Executive / Life)</del></td><td>Lista igual aos nomes da página Programas</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="texto" style="margin-top:1rem">
+      <p class="discreto">Mantidos em maiúsculas por serem nomes próprios ou siglas: SALEKIM (assim escrita no site atual), VIDA, DNA, SBDG, UNISANTOS, ICI, SEBRAE, SESC, BASF, RH, LGPD.</p>
+      <h3>Revisão dos botões do site atual</h3>
+      <p>Cada botão e link foi conferido nas seis páginas. Situação: <span class="estado quebrado">quebrado</span> não funciona, <span class="estado ajuste">ajuste</span> funciona mas leva ao lugar errado ou confunde, <span class="estado ok">ok</span> funciona.</p>
+    </div>
+    <div class="tabela" style="margin-top:1rem">
+      <table>
+        <thead><tr><th>Página</th><th>Botão</th><th>Hoje</th><th>Situação</th><th>Na proposta</th></tr></thead>
+        <tbody>
+          <tr><td>Programas</td><td>Quero saber mais (Método VIDA)</td><td>Leva para #salekim-form-pessoas, que não existe nesta página. O clique não faz nada.</td><td><span class="estado quebrado">quebrado</span></td><td>Desce até o formulário da própria página com o programa já escolhido.</td></tr>
+          <tr><td>Programas</td><td>Entrar na lista de espera (InterAgir)</td><td>Mesmo destino inexistente.</td><td><span class="estado quebrado">quebrado</span></td><td>Formulário da página, com “Programa InterAgir” já escolhido.</td></tr>
+          <tr><td>Programas</td><td>Entrar na lista de espera (DNA)</td><td>Mesmo destino inexistente.</td><td><span class="estado quebrado">quebrado</span></td><td>Formulário da página, com o programa DNA já escolhido.</td></tr>
+          <tr><td>Programas</td><td>Quero saber mais (Formação em desenvolvimento de grupos)</td><td>Abre o WhatsApp sem mensagem. O mesmo texto de botão faz coisas diferentes na mesma página.</td><td><span class="estado ajuste">ajuste</span></td><td>“Quero saber mais” sempre abre o formulário; “Conversar pelo WhatsApp” abre a conversa já com o nome do programa.</td></tr>
+          <tr><td>Programas</td><td>Falar com a Genira (Supervisão e Acompanhamento individual)</td><td>Abre o WhatsApp sem mensagem; a Genira não sabe de qual programa se trata.</td><td><span class="estado ajuste">ajuste</span></td><td>Mensagem pronta com o nome do programa, e opção de formulário.</td></tr>
+          <tr><td>Início</td><td>Pedir proposta</td><td>Vai para o topo da página Para empresas; o formulário fica no fim.</td><td><span class="estado ajuste">ajuste</span></td><td>Vai direto ao formulário de proposta.</td></tr>
+          <tr><td>Início</td><td>Quero saber mais</td><td>Vai para a página Programas, que tinha os botões quebrados.</td><td><span class="estado ajuste">ajuste</span></td><td>“Saber mais sobre os programas” leva ao formulário de pessoas.</td></tr>
+          <tr><td>Início</td><td>Conhecer → (Para Empresas / Para Pessoas)</td><td>Funcionam.</td><td><span class="estado ok">ok</span></td><td>Texto mais claro: “Conhecer as soluções” e “Ver os programas”.</td></tr>
+          <tr><td>Clientes</td><td>Formulário “Pedir proposta”</td><td>Funciona, mas repete o formulário de Para empresas e de Contato (três cópias para manter).</td><td><span class="estado ajuste">ajuste</span></td><td>Um botão que leva ao único formulário de proposta.</td></tr>
+          <tr><td>Contato</td><td>Lista “Programa de interesse”</td><td>Nomes diferentes dos da página Programas (“DNA — Mentoria”, “Coaching (Executive / Life)”).</td><td><span class="estado ajuste">ajuste</span></td><td>Mesmos nomes da página Programas.</td></tr>
+          <tr><td>Contato</td><td>Dois formulários empilhados</td><td>Visitante precisa descobrir qual preencher.</td><td><span class="estado ajuste">ajuste</span></td><td>Escolha “Sou de uma empresa” ou “Quero me desenvolver” e aparece só o formulário certo.</td></tr>
+          <tr><td>Todas</td><td>Avisos de envio do formulário</td><td>Somem sozinhos depois de 6 segundos; quem lê devagar perde a confirmação.</td><td><span class="estado ajuste">ajuste</span></td><td>O aviso fica na tela e é anunciado pelo leitor de tela.</td></tr>
+          <tr><td>Todas</td><td>Campo de telefone</td><td>O exemplo mostra “(11) 90000-0000”, mas o campo apaga parênteses e hífen ao sair dele.</td><td><span class="estado ajuste">ajuste</span></td><td>O número é formatado como no exemplo enquanto se digita.</td></tr>
+          <tr><td>Todas</td><td>Aviso de cookies: Aceito / Só os essenciais</td><td>Funcionam, mas não há como mudar a escolha depois. A LGPD pede que o consentimento possa ser revogado.</td><td><span class="estado ajuste">ajuste</span></td><td>“Aceitar todos” e “Só os essenciais”, e um link “Preferências de cookies” no rodapé reabre o aviso.</td></tr>
+          <tr><td>Política de privacidade</td><td>Título</td><td>“Política de Privacidade” aparece duas vezes seguidas (título da página e do texto).</td><td><span class="estado ajuste">ajuste</span></td><td>Um título só.</td></tr>
+          <tr><td>Sobre</td><td>Foto da Genira</td><td>Sem texto alternativo; leitor de tela não descreve a imagem.</td><td><span class="estado ajuste">ajuste</span></td><td>Texto alternativo com o nome dela.</td></tr>
+          <tr><td>Todas</td><td>Menu, logotipo, e-mail, WhatsApp, Instagram, botão flutuante do WhatsApp</td><td>Funcionam.</td><td><span class="estado ok">ok</span></td><td>Mantidos. O menu ganha versão para celular e o rodapé ganha atalhos para todas as páginas.</td></tr>
+          <tr><td>Sobre</td><td>Nenhum botão</td><td>A página termina sem chamada para ação.</td><td><span class="estado ajuste">ajuste</span></td><td>Chamada final com “Pedir proposta para empresa” e “Ver os programas para pessoas”.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="texto" style="margin-top:2rem">
+      <h3>Para colocar no ar</h3>
+      <p>O site atual é WordPress com Elementor e um plugin próprio (salekim-site). A troca pode ser feita por etapas: primeiro os três botões quebrados da página Programas (basta criar o formulário de pessoas nessa página com a âncora salekim-form-pessoas), depois o texto e as maiúsculas, e por fim o novo layout.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="rodape">
+  <div class="envoltorio">
+    <div class="colunas">
+      <div style="display:grid;gap:.75rem;align-content:start">
+        <p class="lema">Transformação com profundidade e leveza.</p>
+        <p style="opacity:.85">Desenvolvimento humano e organizacional desde 1996.</p>
+      </div>
+      <div><h2>Site</h2><ul><li><a href="#sobre">Sobre</a></li><li><a href="#para-empresas">Para empresas</a></li><li><a href="#programas">Programas</a></li><li><a href="#clientes">Clientes</a></li><li><a href="#contato">Contato</a></li></ul></div>
+      <div><h2>Contato</h2><ul><li>genira@salekim.com.br</li><li><a target="_blank" rel="noopener" href="https://wa.me/5511999143277">WhatsApp (11) 99914-3277</a></li><li><a target="_blank" rel="noopener" href="https://www.instagram.com/genirarosa">Instagram @genirarosa</a></li></ul></div>
+    </div>
+    <div class="base">
+      <span>© 2026 SALEKIM Treinamento e Desenvolvimento Ltda. · São Vicente/SP</span>
+      <span><a href="#privacidade">Política de privacidade</a> · <button class="link" type="button" data-abrir-cookies>Preferências de cookies</button></span>
+    </div>
+  </div>
+</footer>
+
+<div class="cookies" id="cookies" role="region" aria-label="Aviso de cookies" hidden>
+  <div class="caixa">
+    <p>Usamos cookies essenciais e, com o seu consentimento, cookies de medição (Google Analytics e Meta Pixel) para melhorar o site. Saiba mais na <a href="#privacidade">política de privacidade</a>.</p>
+    <div class="acoes">
+      <button class="botao pequeno" type="button" id="ck-aceitar">Aceitar todos</button>
+      <button class="botao contorno pequeno" type="button" id="ck-essenciais">Só os essenciais</button>
+    </div>
+  </div>
+</div>
+
+<a class="whatsapp" target="_blank" rel="noopener" href="https://wa.me/5511999143277?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20SALEKIM%20e%20gostaria%20de%20saber%20mais." aria-label="Conversar com a SALEKIM pelo WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script>
+(function(){
+  'use strict';
+  var paginas = Array.prototype.slice.call(document.querySelectorAll('.pagina'));
+  var nomes = paginas.map(function(p){ return p.getAttribute('data-pagina'); });
+  var menu = document.getElementById('menu');
+  var botaoMenu = document.getElementById('botao-menu');
+  var alvoPendente = null;
+
+  function mostrar(nome){
+    if (nomes.indexOf(nome) < 0) nome = 'inicio';
+    paginas.forEach(function(p){ p.hidden = p.getAttribute('data-pagina') !== nome; });
+    Array.prototype.forEach.call(menu.querySelectorAll('a'), function(a){
+      if (a.getAttribute('href') === '#' + nome) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+    });
+    menu.classList.remove('aberto'); botaoMenu.setAttribute('aria-expanded','false');
+    if (alvoPendente) {
+      var alvo = document.getElementById(alvoPendente.id);
+      if (alvoPendente.programa) definir('pessoa-programa', alvoPendente.programa);
+      if (alvoPendente.assunto) definir('empresa-assunto', alvoPendente.assunto);
+      alvoPendente = null;
+      if (alvo) {
+        alvo.scrollIntoView({block:'start'});
+        var primeiro = alvo.querySelector('input:not([type=hidden]):not(.isca-campo)');
+        if (primeiro) primeiro.focus({preventScroll:true});
+        return;
+      }
+    }
+    window.scrollTo(0,0);
+  }
+  function definir(id, valor){ var el = document.getElementById(id); if (el) el.value = valor; }
+  function rota(){ mostrar((location.hash || '#inicio').slice(1)); }
+  window.addEventListener('hashchange', rota);
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a[data-ir-para]') : null;
+    if (!a) return;
+    alvoPendente = { id: a.getAttribute('data-ir-para'), programa: a.getAttribute('data-programa'), assunto: a.getAttribute('data-assunto') };
+    if (a.getAttribute('href') === location.hash) { e.preventDefault(); rota(); }
+  });
+
+  botaoMenu.addEventListener('click', function(){
+    var aberto = menu.classList.toggle('aberto');
+    botaoMenu.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+  });
+
+  /* Contato: escolher o formulário certo */
+  var selE = document.getElementById('sel-empresa'), selP = document.getElementById('sel-pessoa');
+  function escolher(empresa){
+    selE.setAttribute('aria-pressed', empresa ? 'true':'false');
+    selP.setAttribute('aria-pressed', empresa ? 'false':'true');
+    document.getElementById('contato-empresa').hidden = !empresa;
+    document.getElementById('contato-pessoa').hidden = empresa;
+  }
+  selE.addEventListener('click', function(){ escolher(true); });
+  selP.addEventListener('click', function(){ escolher(false); });
+
+  /* Telefone no formato (11) 99999-9999 */
+  document.addEventListener('input', function(e){
+    var t = e.target; if (!t || t.type !== 'tel') return;
+    var d = t.value.replace(/\D/g,'').slice(0,11), s = d;
+    if (d.length > 2) s = '(' + d.slice(0,2) + ') ' + d.slice(2);
+    if (d.length > 6) s = '(' + d.slice(0,2) + ') ' + d.slice(2, d.length-4) + '-' + d.slice(-4);
+    t.value = s;
+  });
+
+  /* Formulários: no protótipo, só confirmam na tela */
+  Array.prototype.forEach.call(document.querySelectorAll('form.formulario'), function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var aviso = f.querySelector('.aviso');
+      if (f.querySelector('.isca-campo').value) return;
+      var tel = f.querySelector('input[type=tel]');
+      if (tel && tel.value.replace(/\D/g,'').length < 10) {
+        aviso.className = 'aviso erro'; aviso.hidden = false;
+        aviso.textContent = 'Confira o telefone: use DDD e número, por exemplo (11) 99914-3277.';
+        tel.focus(); return;
+      }
+      var nome = f.querySelector('input[name=nome]').value.trim().split(' ')[0];
+      aviso.className = 'aviso'; aviso.hidden = false;
+      aviso.textContent = 'Obrigada, ' + nome + '. Este é um protótipo e nada foi enviado. No site publicado, a mensagem chega ao e-mail da Genira e ela responde pessoalmente.';
+    });
+  });
+
+  /* Copiar contato */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-copiar]') : null; if (!b) return;
+    var el = document.getElementById(b.getAttribute('data-copiar'));
+    function marcar(){ var s = window.getSelection(), r = document.createRange(); r.selectNodeContents(el); s.removeAllRanges(); s.addRange(r); }
+    try {
+      navigator.clipboard.writeText(el.textContent).then(function(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 2000); }, marcar);
+    } catch (err) { marcar(); }
+  });
+
+  /* Cookies: escolha salva, e pode ser revista no rodapé */
+  var cookies = document.getElementById('cookies');
+  function ler(){ try { return localStorage.getItem('salekim_cookies'); } catch (e) { return null; } }
+  function gravar(v){ try { localStorage.setItem('salekim_cookies', v); } catch (e) {} cookies.hidden = true; }
+  if (!ler()) cookies.hidden = false;
+  document.getElementById('ck-aceitar').addEventListener('click', function(){ gravar('aceitos'); });
+  document.getElementById('ck-essenciais').addEventListener('click', function(){ gravar('essenciais'); });
+  document.addEventListener('click', function(e){
+    if (e.target.closest && e.target.closest('[data-abrir-cookies]')) { cookies.hidden = false; document.getElementById('ck-aceitar').focus(); }
+  });
+
+  rota();
+})();
+</script>
+
+</body>
+</html>
