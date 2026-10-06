@@ -2,10 +2,18 @@
 
 Proposta de layout para [salekim.com.br](https://salekim.com.br), feita a partir do perfil publicado em [salekim.com.br/sobre](https://salekim.com.br/sobre/) (lido em 6 de outubro de 2026).
 
+## Plugin que monta o site (novo)
+
+`dist/salekim-site.zip` é o plugin WordPress **SALEKIM Site 2.0**. Instalado e ativado em www.salekim.com.br, ele monta o site inteiro: páginas com os textos do briefing, programas, serviços, menu, formulários de proposta e de programas (com envio para genira@salekim.com.br), WhatsApp, aviso de cookies (LGPD), Google Analytics e Meta Pixel com consentimento e SEO básico. Instruções em [`plugin/salekim-site/LEIA-ME.md`](plugin/salekim-site/LEIA-ME.md).
+
+Para gerar o zip de novo depois de mudar o código: `bash plugin/montar-zip.sh`.
+
 ## O que tem aqui
 
 | Arquivo | O que é |
 |---|---|
+| `plugin/salekim-site/` | Código do plugin WordPress que monta o site. |
+| `dist/salekim-site.zip` | Plugin pronto para instalar (Plugins > Adicionar novo > Enviar plugin). |
 | `prototipo/index.html` | Protótipo navegável com todas as páginas do site. Abra direto no navegador. |
 | `prototipo/fonte.html` | Fonte do protótipo (textos, estilos e comportamento dos botões). |
 | `prototipo/montar.py` | Gera `index.html` e `artefato.html` (versão com imagens embutidas, para compartilhar como página única). |
