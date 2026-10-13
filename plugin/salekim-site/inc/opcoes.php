@@ -97,3 +97,12 @@ function salekim_link( $chave, $ancora = '' ) {
 	}
 	return $url . ( $ancora ? '#' . $ancora : '' );
 }
+
+/** Endereço digitado no painel: caminhos deste site (/pagina/) viram endereço completo. */
+function salekim_endereco( $endereco ) {
+	$endereco = trim( (string) $endereco );
+	if ( '' === $endereco ) {
+		return '';
+	}
+	return 0 === strpos( $endereco, '/' ) && 0 !== strpos( $endereco, '//' ) ? home_url( $endereco ) : $endereco;
+}

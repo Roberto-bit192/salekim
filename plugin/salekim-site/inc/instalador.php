@@ -276,3 +276,81 @@ function salekim_limpar_demo() {
 	}
 	return $relatorio;
 }
+
+/* ---------- Atualizações ---------- */
+
+/**
+ * Ao trocar o plugin por uma versão nova ("Substituir a atual pela enviada"), o WordPress
+ * não roda a ativação de novo. Aqui entra só o que cada versão acrescenta, sem mexer
+ * em textos, programas, menus ou configurações que a SALEKIM já editou.
+ */
+add_action( 'init', 'salekim_atualizar', 30 );
+
+function salekim_atualizar() {
+	$montada = get_option( 'salekim_versao_montada' );
+	if ( ! $montada || version_compare( $montada, SALEKIM_VERSAO, '>=' ) ) {
+		return; // Site ainda não montado (a ativação cuida disso) ou já atualizado.
+	}
+	$relatorio = array();
+
+	if ( version_compare( $montada, '2.1.0', '<' ) ) {
+		$relatorio = array_merge( $relatorio, salekim_atualizar_2_1() );
+	}
+
+	update_option( 'salekim_versao_montada', SALEKIM_VERSAO );
+	if ( $relatorio ) {
+		set_transient( 'salekim_relatorio', $relatorio, HOUR_IN_SECONDS );
+	}
+}
+
+/** 2.1: página do Pré-projeto Vida após a aposentadoria e botão "Saiba mais" no Método VIDA. */
+function salekim_atualizar_2_1() {
+	$relatorio = array();
+	$chave     = 'pre-projeto-vida';
+	$paginas   = salekim_paginas_padrao();
+	$p         = $paginas[ $chave ];
+	$ids       = get_option( 'salekim_paginas', array() );
+
+	$existente = get_page_by_path( $chave, OBJECT, 'page' );
+	if ( $existente && 'trash' !== $existente->post_status ) {
+		$id = $existente->ID; // Já existe uma página com esse endereço: não é sobrescrita.
+	} else {
+		$id = wp_insert_post(
+			wp_slash(
+				array(
+					'post_type'    => 'page',
+					'post_status'  => 'publish',
+					'post_title'   => $p['titulo'],
+					'post_name'    => $chave,
+					'post_content' => $p['conteudo'],
+					'menu_order'   => count( $paginas ),
+				)
+			),
+			true
+		);
+		if ( is_wp_error( $id ) ) {
+			return array( 'Erro ao criar a página ' . $p['titulo'] . ': ' . $id->get_error_message() );
+		}
+		update_post_meta( $id, '_sk_pagina', $chave );
+		update_post_meta( $id, '_sk_descricao', $p['descricao'] );
+		$relatorio[] = 'Página criada: ' . $p['titulo'] . '.';
+	}
+	$ids[ $chave ] = (int) $id;
+	update_option( 'salekim_paginas', $ids );
+
+	$vida = get_posts(
+		array(
+			'post_type'      => 'sk_programa',
+			'post_status'    => 'any',
+			'meta_key'       => '_sk_chave', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value'     => 'vida', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+		)
+	);
+	if ( $vida && ! metadata_exists( 'post', $vida[0], '_sk_saiba_mais' ) ) {
+		update_post_meta( $vida[0], '_sk_saiba_mais', '/' . $chave . '/' );
+		$relatorio[] = 'Botão "Saiba mais" incluído no Método VIDA, levando à página ' . $p['titulo'] . '.';
+	}
+	return $relatorio;
+}

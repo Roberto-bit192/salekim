@@ -1,4 +1,11 @@
-# Plugin SALEKIM Site 2.0
+# Plugin SALEKIM Site 2.1
+
+## Novidades da 2.1
+
+* Botão **Saiba mais** no bloco do Método VIDA, na página Programas. Leva à nova página **Pré-projeto Vida após a aposentadoria** (`/pre-projeto-vida/`).
+* Qualquer programa pode ter o seu "Saiba mais": em **SALEKIM > Programas**, preencha o campo *Link do botão "Saiba mais"*. Em branco, o botão não aparece.
+* Ao substituir a versão 2.0 pela 2.1, o plugin só cria a página nova e o botão. Textos, botões e menus já editados ficam como estão.
+* Os botões "Quero o meu pré-projeto" da página nova abrem o WhatsApp. Quando houver o link da Hotmart, troque-os em **Páginas > Pré-projeto Vida após a aposentadoria** (clique no botão e cole o link).
 
 Monta o site www.salekim.com.br do começo ao fim, a partir do briefing de setembro de 2026 e do rascunho de textos de 25/09/2026.
 

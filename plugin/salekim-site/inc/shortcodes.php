@@ -106,6 +106,7 @@ function salekim_sc_programas() {
 		$botao    = get_post_meta( $p->ID, '_sk_botao', true );
 		$link     = get_post_meta( $p->ID, '_sk_link', true );
 		$whats    = '1' === get_post_meta( $p->ID, '_sk_whatsapp', true );
+		$mais     = salekim_endereco( get_post_meta( $p->ID, '_sk_saiba_mais', true ) );
 		$botao    = $botao ? $botao : 'Quero saber mais';
 
 		$out .= '<article class="programa" id="' . esc_attr( $p->post_name ) . '"><div class="programa-texto">';
@@ -116,7 +117,11 @@ function salekim_sc_programas() {
 		if ( $publico ) {
 			$out .= '<p class="publico">' . esc_html( $publico ) . '</p>';
 		}
-		$out .= '<div class="descricao">' . salekim_texto_item( $p ) . '</div></div><div class="programa-acoes">';
+		$out .= '<div class="descricao">' . salekim_texto_item( $p ) . '</div>';
+		if ( $mais ) {
+			$out .= '<p class="programa-mais"><a class="botao contorno pequeno saiba-mais" href="' . esc_url( $mais ) . '" aria-label="' . esc_attr( 'Saiba mais sobre ' . $titulo ) . '">Saiba mais</a></p>';
+		}
+		$out .= '</div><div class="programa-acoes">';
 		if ( $link ) {
 			$out .= '<a class="botao laranja" href="' . esc_url( $link ) . '" target="_blank" rel="noopener" data-sk-evento="programa_externo" data-programa="' . esc_attr( $titulo ) . '">' . esc_html( $botao ) . '</a>';
 		} else {

@@ -405,6 +405,9 @@ function salekim_paginas_padrao() {
 		'secao prosa'
 	);
 
+	/* Pré-projeto Vida após a aposentadoria (aberta pelo botão "Saiba mais" do Método VIDA) */
+	$vida = salekim_conteudo_pre_projeto_vida();
+
 	return array(
 		'inicio'                  => array(
 			'titulo'    => 'Início',
@@ -454,6 +457,12 @@ function salekim_paginas_padrao() {
 			'menu'      => false,
 			'conteudo'  => $priv,
 		),
+		'pre-projeto-vida'        => array(
+			'titulo'    => 'Pré-projeto Vida após a aposentadoria',
+			'descricao' => 'Caderno digital guiado para criar, em 7 dias, o seu pré-projeto de vida para depois da aposentadoria. Método VIDA, com Genira Rosa dos Santos. R$ 67.',
+			'menu'      => false,
+			'conteudo'  => $vida,
+		),
 	);
 }
 
@@ -493,6 +502,7 @@ function salekim_programas_padrao() {
 			'etiqueta'  => 'Inscrições abertas',
 			'botao'     => 'Quero participar',
 			'link'      => '',
+			'saiba_mais' => '/pre-projeto-vida/',
 			'whatsapp'  => 1,
 		),
 		'formacao'    => array(
@@ -541,4 +551,227 @@ function salekim_programas_padrao() {
 			'whatsapp'  => 1,
 		),
 	);
+}
+
+/* ---------- Pré-projeto Vida após a aposentadoria ---------- */
+
+/**
+ * Página do produto de entrada do Método VIDA, a partir do briefing factual do
+ * Pré-projeto Vida após a aposentadoria. Só usa informações confirmadas no briefing:
+ * sem depoimentos, números ou garantias que não estejam lá.
+ */
+function salekim_conteudo_pre_projeto_vida() {
+	$quero  = salekim_whatsapp_url( 'Olá, Genira! Quero o Pré-projeto Vida após a aposentadoria.' );
+	$metodo = salekim_rel( '/programas/' ) . '#metodo-vida';
+
+	$out = salekim_b_grupo(
+		salekim_b_p( 'Método VIDA · O primeiro passo', 'rotulo' )
+		. salekim_b_h( 'Pré-projeto Vida após a aposentadoria', 1 )
+		. salekim_b_p( 'Um caderno digital guiado para você criar, em 7 dias, o seu pré-projeto de vida para depois da aposentadoria. Um convite para pensar no que você quer viver nessa próxima fase, e não só no que vai deixar de fazer.', 'discreto' )
+		. salekim_b_p( '<strong>R$ 67</strong> · acesso por 12 meses · garantia de 7 dias', 'preco' )
+		. salekim_b_botoes(
+			array(
+				array( 'Quero o meu pré-projeto', $quero, 'laranja' ),
+				array( 'Ver o que está incluído', '#o-que-voce-recebe', 'contorno' ),
+			)
+		),
+		'secao cabeca pessoas'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'Para quem é', 'rotulo' )
+		. salekim_b_h( 'Para quem está chegando perto da aposentadoria ou acabou de se aposentar.' )
+		. salekim_b_colunas(
+			array(
+				array(
+					salekim_b_p( 'O caderno foi pensado para pessoas entre 45 e 65 anos, aproximadamente, que querem refletir sobre o que desejam viver depois da aposentadoria formal. Ele não parte do princípio de que você quer continuar trabalhando. Essa escolha é sua, e o caderno ajuda a fazê-la com mais clareza.' )
+					. salekim_b_p( '“Não quero simplesmente parar de trabalhar e ficar sem saber o que fazer da minha vida.”', 'citacao' ),
+				),
+				array(
+					salekim_b_p( 'Talvez você se reconheça aqui', 'rotulo' )
+					. salekim_b_lista(
+						array(
+							'Medo do vazio e da perda da rotina.',
+							'Dificuldade de imaginar a próxima fase.',
+							'A sensação de não saber quem você é além do trabalho.',
+							'Receio de depender dos filhos.',
+							'Preocupação com a falta de utilidade ou de direção.',
+							'Dificuldade de organizar os próprios desejos.',
+						),
+						'credenciais'
+					),
+				),
+			),
+			'duas-colunas'
+		),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'Como funciona', 'rotulo' )
+		. salekim_b_h( 'O método V.I.D.A., em quatro etapas.' )
+		. salekim_b_p( 'Uma reflexão estruturada sobre identidade, desejos, prioridades e primeiros passos, no seu ritmo.', 'discreto' )
+		. salekim_b_colunas(
+			array(
+				array( salekim_b_h( '<span class="letra">V</span>Visão', 3 ) . salekim_b_p( 'Reconhecer o momento atual.', 'discreto' ), 'nivel' ),
+				array( salekim_b_h( '<span class="letra">I</span>Intenção', 3 ) . salekim_b_p( 'Refletir sobre o que deseja viver.', 'discreto' ), 'nivel' ),
+				array( salekim_b_h( '<span class="letra">D</span>Direção', 3 ) . salekim_b_p( 'Escolher prioridades.', 'discreto' ), 'nivel' ),
+				array( salekim_b_h( '<span class="letra">A</span>Ação', 3 ) . salekim_b_p( 'Definir os primeiros passos.', 'discreto' ), 'nivel' ),
+			),
+			'niveis letras-vida'
+		),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'O caminho', 'rotulo' )
+		. salekim_b_h( 'Sete etapas, do que está mudando ao seu próximo passo.' )
+		. salekim_b_lista(
+			array(
+				'<strong>O que está mudando</strong>',
+				'<strong>Quem sou além do trabalho</strong>',
+				'<strong>O que quero viver</strong>',
+				'<strong>Minhas áreas prioritárias</strong>',
+				'<strong>Minha visão da próxima fase</strong>',
+				'<strong>Minha primeira direção</strong>',
+				'<strong>Meu próximo passo</strong>',
+			),
+			'passos etapas-vida',
+			true
+		),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'O que você recebe', 'rotulo' )
+		. salekim_b_h( 'Tudo o que você precisa para sair com o seu pré-projeto pronto.' )
+		. salekim_b_colunas(
+			array(
+				array(
+					salekim_b_lista(
+						array(
+							'Caderno digital guiado, com versão para impressão.',
+							'Diagnóstico “Onde estou nesta transição”.',
+							'Mapa das sete áreas da próxima fase.',
+							'Exercício de identidade além do trabalho.',
+							'Roteiro de visão da vida após a aposentadoria.',
+							'Matriz para escolha de prioridades.',
+							'Modelo preenchido de pré-projeto, para servir de exemplo.',
+							'Plano de três ações para os 30 dias seguintes.',
+							'Aula tutorial de até cinco minutos.',
+						),
+						'credenciais'
+					),
+				),
+				array(
+					salekim_b_h( 'Bônus: encontro coletivo ao vivo com a Genira', 3 )
+					. salekim_b_lista(
+						array(
+							'Encontro de 2 horas pelo Zoom, com até 8 pessoas.',
+							'Você pede a sua vaga entre o 8º e o 30º dia após a compra. As instruções ficam na área de membros da Hotmart.',
+							'Data e horário são combinados com o grupo, e o link chega pelo WhatsApp.',
+							'Dá para reagendar dentro dos 30 dias, avisando com pelo menos 24 horas de antecedência.',
+							'Se todos concordarem, o encontro é gravado e a gravação fica disponível por 12 meses.',
+						),
+						'credenciais'
+					),
+					'bonus',
+				),
+			),
+			'duas-colunas'
+		),
+		'secao',
+		'o-que-voce-recebe'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'O que o caderno pode ajudar você a fazer', 'rotulo' )
+		. salekim_b_h( 'Tratar a aposentadoria como uma nova fase, e não só como o fim do trabalho.' )
+		. salekim_b_lista(
+			array(
+				'Começar a pensar antes da aposentadoria',
+				'Reconhecer o que está mudando',
+				'Separar a sua identidade do cargo',
+				'Lembrar interesses',
+				'Perceber habilidades úteis',
+				'Nomear o que deseja preservar',
+				'Identificar atividades para experimentar',
+				'Organizar desejos',
+				'Escolher prioridades',
+				'Visualizar uma vida além do descanso',
+				'Fortalecer relações',
+				'Incluir aprendizagem',
+				'Avaliar se deseja continuar trabalhando',
+				'Transformar a reflexão em três ações',
+				'Chegar à mentoria do Método VIDA com mais clareza',
+			),
+			'valores'
+		)
+		. salekim_b_p( 'São possibilidades de reflexão e de organização, e não uma garantia de resultado.', 'discreto nota' ),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_colunas(
+			array(
+				array( salekim_b_sc( '[salekim_foto]' ), 'retrato-coluna' ),
+				array(
+					salekim_b_p( 'Quem criou', 'rotulo' )
+					. salekim_b_h( 'Genira Rosa dos Santos' )
+					. salekim_b_p( 'Sócia e consultora da SALEKIM. Desde 1990 atua como consultora, educadora, terapeuta e coach.', 'discreto' )
+					. salekim_b_lista(
+						array(
+							'Mestre em educação',
+							'Graduada em administração pela UNISANTOS',
+							'Especialista em desenvolvimento de grupos pela SBDG, onde é didata e docente',
+							'Formação em executive coach e life coach pelo ICI',
+							'Coautora do livro <em>Manual de múltiplas inteligências</em>',
+						),
+						'credenciais'
+					),
+				),
+			),
+			'conduz'
+		),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_p( 'Acesso e garantia', 'rotulo' )
+		. salekim_b_colunas(
+			array(
+				array(
+					salekim_b_h( 'Acesso', 3 )
+					. salekim_b_lista(
+						array(
+							'Download liberado depois da confirmação do pagamento.',
+							'Caderno, versão para impressão e aula tutorial no mesmo módulo da Hotmart.',
+							'Acesso por 12 meses, individual e não transferível.',
+						),
+						'credenciais'
+					),
+				),
+				array(
+					salekim_b_h( 'Garantia de 7 dias', 3 )
+					. salekim_b_p( 'Você tem 7 dias de garantia para conhecer o material.' ),
+				),
+			),
+			'duas-colunas'
+		),
+		'secao'
+	);
+
+	$out .= salekim_b_grupo(
+		salekim_b_h( 'Comece a desenhar a sua próxima fase.' )
+		. salekim_b_p( 'Em 7 dias, você sai com o seu pré-projeto de vida e três ações para os 30 dias seguintes.' )
+		. salekim_b_botoes(
+			array(
+				array( 'Quero o meu pré-projeto', $quero ),
+				array( 'Conhecer o Método VIDA', $metodo, 'contorno' ),
+			)
+		),
+		'chamada'
+	);
+
+	return $out;
 }

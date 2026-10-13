@@ -3,7 +3,7 @@ Contributors: salekim
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 
 Monta o site www.salekim.com.br do começo ao fim.
@@ -32,6 +32,11 @@ Nada é apagado: páginas antigas com o mesmo endereço ganham uma revisão ante
 Guia completo em LEIA-ME.md.
 
 == Changelog ==
+
+= 2.1.0 =
+* Botão "Saiba mais" nos programas, com link editável em SALEKIM > Programas.
+* Nova página Pré-projeto Vida após a aposentadoria (/pre-projeto-vida/), ligada ao Método VIDA.
+* Ao substituir o plugin, cria só o que é novo, sem mexer no que já foi editado.
 
 = 2.0.0 =
 * Site completo: páginas, programas, serviços, depoimentos, formulários, LGPD, SEO, Analytics e Pixel.

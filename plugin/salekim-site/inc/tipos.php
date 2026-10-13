@@ -97,6 +97,7 @@ function salekim_campos_tipo( $tipo ) {
 			'etiqueta' => array( 'Etiqueta', 'escolha', 'Destaque pequeno acima do nome.' ),
 			'botao'    => array( 'Texto do botão principal', 'texto', 'Ex.: Quero saber mais, Entrar na lista de espera, Quero participar.' ),
 			'link'     => array( 'Link externo do botão (opcional)', 'url', 'Ex.: página de vendas do VIDA na Hotmart. Em branco, o botão abre o formulário de programas com este programa já escolhido.' ),
+			'saiba_mais' => array( 'Link do botão "Saiba mais" (opcional)', 'endereco', 'Página com mais detalhes do programa, deste site (ex.: /pre-projeto-vida/) ou de outro. Em branco, o botão não aparece.' ),
 			'whatsapp' => array( 'Mostrar botão "Conversar pelo WhatsApp"', 'marcar', 'A conversa já abre com o nome do programa.' ),
 		),
 		'sk_servico'    => array(
@@ -141,7 +142,8 @@ function salekim_caixa_campos( $post ) {
 			echo '<label><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" value="1"' . checked( $valor, '1', false ) . '> Sim</label>';
 		} else {
 			$type = 'url' === $c[1] ? 'url' : 'text';
-			echo '<input class="large-text" type="' . $type . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" value="' . esc_attr( $valor ) . '">';
+			$modo = 'endereco' === $c[1] ? ' inputmode="url"' : '';
+			echo '<input class="large-text" type="' . $type . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $id ) . '" value="' . esc_attr( $valor ) . '"' . $modo . '>';
 		}
 		if ( $c[2] ) {
 			echo '<p class="description">' . esc_html( $c[2] ) . '</p>';
@@ -176,7 +178,8 @@ function salekim_salvar_campos( $post_id, $post ) {
 			continue;
 		}
 		$valor = isset( $_POST[ $nome ] ) ? wp_unslash( $_POST[ $nome ] ) : '';
-		$valor = 'url' === $c[1] ? esc_url_raw( $valor ) : sanitize_text_field( $valor );
+		// "endereco" aceita também caminhos deste site, como /pre-projeto-vida/.
+		$valor = in_array( $c[1], array( 'url', 'endereco' ), true ) ? esc_url_raw( trim( $valor ) ) : sanitize_text_field( $valor );
 		update_post_meta( $post_id, '_sk_' . $chave, $valor );
 	}
 }
