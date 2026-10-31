@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
- * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.1.0
+ * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca o título da chamada final da página Sobre para "Conheça nossos programas". Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
+ * Version:           1.2.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.1.0' );
+define( 'SALEKIM_PP_VERSAO', '1.2.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
@@ -72,4 +72,21 @@ function salekim_pp_trocar( $html ) {
 	$titulo = '<' . $nivel . $m[2][0] . '>' . esc_html( $t['titulo'] ) . '</' . $nivel . '>';
 
 	return substr( $html, 0, $inicio ) . $titulo . $bloco . substr( $html, $fim );
+}
+
+/**
+ * Página Sobre: o título da chamada final ("Faça contato conosco") passa a ser "Conheça nossos programas".
+ * A troca é feita na página já pronta, porque esse bloco pode vir do editor, do Elementor ou de um shortcode.
+ */
+add_action( 'template_redirect', 'salekim_pp_sobre' );
+
+function salekim_pp_sobre() {
+	if ( is_admin() || ! is_page( array( 'sobre', 'Sobre' ) ) ) {
+		return;
+	}
+	ob_start(
+		function ( $html ) {
+			return preg_replace( '~(<h[1-6][^>]*>\s*)Fa(?:ç|&ccedil;|&#231;)a contato conosco(\s*</h[1-6]>)~iu', '$1Conheça nossos programas$2', $html );
+		}
+	);
 }
