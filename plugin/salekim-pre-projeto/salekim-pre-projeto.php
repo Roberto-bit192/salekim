@@ -3,7 +3,7 @@
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
  * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Troca o título e o texto da página Sobre. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.5.0' );
+define( 'SALEKIM_PP_VERSAO', '1.6.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
@@ -345,43 +345,164 @@ function salekim_pp_sobre_conteudo() {
 	$secao = function ( $interno ) {
 		return '<div class="wp-block-group secao texto-largo sk-sobre-texto">' . $interno . '</div>';
 	};
-	return $secao( $sobre ) . $secao( $como ) . $secao( $formacao )
-		. '<style>.salekim .sk-sobre-titulo{font-size:clamp(1.45rem,2.6vw,2.05rem);line-height:1.3}'
-		. '.sk-sobre-texto>*+*{margin-top:1rem}.sk-sobre-texto>h2+*{margin-top:1.1rem}.sk-sobre-texto .credenciais{margin-top:1rem}</style>';
+	return $secao( $sobre ) . $secao( $como ) . $secao( $formacao );
+}
+
+/** Estilo do título e das seções novas da página Sobre. */
+function salekim_pp_sobre_estilo() {
+	return '<style id="salekim-pp-sobre">h1.sk-sobre-titulo{font-size:clamp(1.45rem,2.6vw,2.05rem)!important;line-height:1.3!important}'
+		. '.sk-sobre-texto>*+*{margin-top:1rem}.sk-sobre-texto>h2+*{margin-top:1.1rem}.sk-sobre-texto ul{margin-top:1rem}</style>';
 }
 
 /**
- * Troca o título (h1) da página Sobre e substitui as seções de texto (da "A minha história" até
- * "Nossos valores") pelo texto novo. A abertura com a foto e o quadro final ficam como estão.
+ * Troca o título (h1) da página Sobre e substitui as seções de texto (de "A minha história" até
+ * o fim do texto, antes do quadro final) pelo texto novo. A abertura com a foto e o quadro final ficam.
  */
 function salekim_pp_sobre_texto( $html ) {
-	// Título.
-	$html = preg_replace(
-		'~<h1([^>]*)>\s*Comecei desenhando processos\..*?</h1>~su',
-		'<h1$1 data-sk-titulo>' . esc_html( salekim_pp_sobre_titulo() ) . '</h1>',
+	// Título, com letra menor (o estilo vai no próprio título, para valer em qualquer layout).
+	$html = preg_replace_callback(
+		'~<h1\b([^>]*)>\s*(?:<[^>]+>\s*)*Comecei desenhando processos\..*?</h1>~su',
+		function ( $m ) {
+			$atributos = $m[1];
+			if ( preg_match( '~\bclass="([^"]*)"~', $atributos ) ) {
+				$atributos = preg_replace( '~\bclass="([^"]*)"~', 'class="$1 sk-sobre-titulo"', $atributos, 1 );
+			} else {
+				$atributos .= ' class="sk-sobre-titulo"';
+			}
+			$atributos = preg_replace( '~\sstyle="[^"]*"~', '', $atributos );
+			return '<h1' . $atributos . ' style="font-size:clamp(1.45rem,2.6vw,2.05rem);line-height:1.3">' . esc_html( salekim_pp_sobre_titulo() ) . '</h1>';
+		},
 		$html,
 		1
 	);
-	$html = preg_replace( '~<h1([^>]*?)class="([^"]*)"([^>]*) data-sk-titulo>~', '<h1$1class="$2 sk-sobre-titulo"$3>', $html, 1, $com_classe );
-	if ( ! $com_classe ) {
-		$html = str_replace( ' data-sk-titulo>', ' class="sk-sobre-titulo">', $html );
-	}
 
-	// Seções antigas: do grupo com "A minha história" até o quadro final.
-	$marca = strpos( $html, 'A minha história' );
-	if ( false === $marca ) {
+	// Estilo das partes novas.
+	$html = preg_replace( '~</head>~i', salekim_pp_sobre_estilo() . '</head>', $html, 1 );
+
+	return salekim_pp_sobre_secoes( $html );
+}
+
+/**
+ * Seções antigas: tudo o que vem do bloco com "A minha história" até o bloco do quadro final
+ * ("Conheça nossos programas" ou "Faça contato conosco") sai, e entram as seções novas.
+ * Os blocos são achados pela estrutura da página (o ancestral comum dos dois pontos), sem depender
+ * de nomes de classes, para funcionar com o editor do WordPress ou com o Elementor.
+ */
+function salekim_pp_sobre_secoes( $html ) {
+	if ( false !== strpos( $html, ' sk-sobre-texto"' ) || ! class_exists( 'DOMDocument' ) ) {
 		return $html;
 	}
-	$antes = substr( $html, 0, $marca );
-	if ( ! preg_match_all( '~<div\b[^>]*class="[^"]*\bwp-block-group\b[^"]*\bsecao\b[^"]*"[^>]*>~', $antes, $m, PREG_OFFSET_CAPTURE ) ) {
+	// Trabalha só no conteúdo principal (<main>); sem ele, na página inteira (<body>).
+	$tag = preg_match( '~<main\b[^>]*>~i', $html, $a, PREG_OFFSET_CAPTURE ) ? 'main' : 'body';
+	if ( 'body' === $tag && ! preg_match( '~<body\b[^>]*>~i', $html, $a, PREG_OFFSET_CAPTURE ) ) {
 		return $html;
 	}
-	$inicio = end( $m[0] )[1];
-
-	if ( ! preg_match( '~<div\b[^>]*class="[^"]*\bchamada\b[^"]*"[^>]*>~', $html, $c, PREG_OFFSET_CAPTURE, $marca ) ) {
+	$ini_main = $a[0][1];
+	$fim_main = strripos( $html, '</' . $tag . '>' );
+	if ( false === $fim_main ) {
 		return $html;
 	}
-	$fim = $c[0][1];
+	$fim_main += strlen( '</' . $tag . '>' );
+	$main = substr( $html, $ini_main, $fim_main - $ini_main );
 
-	return substr( $html, 0, $inicio ) . salekim_pp_sobre_conteudo() . substr( $html, $fim );
+	$doc   = new DOMDocument( '1.0', 'UTF-8' );
+	$antes = libxml_use_internal_errors( true );
+	$ok    = $doc->loadHTML( '<?xml encoding="UTF-8">' . $main, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $antes );
+	if ( ! $ok ) {
+		return $html;
+	}
+	$xpath = new DOMXPath( $doc );
+
+	$historia = salekim_pp_no_com_texto( $xpath, array( 'A minha história' ) );
+	$final    = salekim_pp_no_com_texto( $xpath, array( 'Conheça nossos programas', 'Faça contato conosco' ) );
+	if ( ! $historia || ! $final ) {
+		return $html;
+	}
+
+	// Ancestral comum e, dentro dele, o filho que contém cada ponto.
+	$cadeia = array();
+	for ( $n = $historia; $n; $n = $n->parentNode ) {
+		$cadeia[] = $n;
+	}
+	$comum = null;
+	$filho_final = null;
+	for ( $n = $final; $n && $n->parentNode; $n = $n->parentNode ) {
+		foreach ( $cadeia as $c ) {
+			if ( $c->isSameNode( $n->parentNode ) ) {
+				$comum       = $n->parentNode;
+				$filho_final = $n;
+				break 2;
+			}
+		}
+	}
+	if ( ! $comum ) {
+		return $html;
+	}
+	$filho_historia = null;
+	foreach ( $cadeia as $c ) {
+		if ( $c->parentNode && $c->parentNode->isSameNode( $comum ) ) {
+			$filho_historia = $c;
+			break;
+		}
+	}
+	if ( ! $filho_historia || $filho_historia->isSameNode( $filho_final ) ) {
+		return $html;
+	}
+
+	// Remove do bloco da história até o bloco antes do quadro final.
+	$n = $filho_historia;
+	while ( $n && ! $n->isSameNode( $filho_final ) ) {
+		$proximo = $n->nextSibling;
+		$comum->removeChild( $n );
+		$n = $proximo;
+	}
+
+	$novo = $doc->createDocumentFragment();
+	$novo->appendXML( salekim_pp_xml( salekim_pp_sobre_conteudo() ) );
+	$comum->insertBefore( $novo, $filho_final );
+
+	$saida = '';
+	foreach ( $doc->childNodes as $no ) {
+		if ( XML_PI_NODE !== $no->nodeType ) {
+			$saida .= $doc->saveHTML( $no );
+		}
+	}
+	return substr( $html, 0, $ini_main ) . $saida . substr( $html, $fim_main );
+}
+
+/** O elemento mais interno cujo texto é exatamente um dos textos dados. */
+function salekim_pp_no_com_texto( $xpath, $textos ) {
+	$achado = null;
+	$fundo  = -1;
+	$textos = array_map( 'mb_strtolower', $textos );
+	foreach ( $xpath->query( '//*' ) as $el ) {
+		if ( ! in_array( mb_strtolower( salekim_pp_texto( $el ) ), $textos, true ) ) {
+			continue;
+		}
+		$profundidade = 0;
+		for ( $n = $el; $n->parentNode; $n = $n->parentNode ) {
+			$profundidade++;
+		}
+		if ( $profundidade > $fundo ) {
+			$achado = $el;
+			$fundo  = $profundidade;
+		}
+	}
+	return $achado;
+}
+
+function salekim_pp_contem( $pai, $filho ) {
+	for ( $n = $filho; $n; $n = $n->parentNode ) {
+		if ( $n->isSameNode( $pai ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/** HTML simples das seções novas em XML válido, para o DOM. */
+function salekim_pp_xml( $html ) {
+	return str_replace( '&nbsp;', '&#160;', $html );
 }

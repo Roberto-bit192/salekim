@@ -1,5 +1,5 @@
 === SALEKIM Pré-projeto ===
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 
 Troca o bloco "Método VIDA" do Portfólio e da página Programas pelo "Pré-projeto", com texto novo.
