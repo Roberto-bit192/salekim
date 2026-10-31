@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
- * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca o título da chamada final da página Sobre para "Conheça nossos programas". Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.2.0
+ * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
+ * Version:           1.3.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.2.0' );
+define( 'SALEKIM_PP_VERSAO', '1.3.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
@@ -75,7 +75,8 @@ function salekim_pp_trocar( $html ) {
 }
 
 /**
- * Página Sobre: o título da chamada final ("Faça contato conosco") passa a ser "Conheça nossos programas".
+ * Página Sobre: a chamada final ("Faça contato conosco" e dois botões) vira só o título
+ * "Conheça nossos programas", que leva às ofertas do Portfólio.
  * A troca é feita na página já pronta, porque esse bloco pode vir do editor, do Elementor ou de um shortcode.
  */
 add_action( 'template_redirect', 'salekim_pp_sobre' );
@@ -84,9 +85,30 @@ function salekim_pp_sobre() {
 	if ( is_admin() || ! is_page( array( 'sobre', 'Sobre' ) ) ) {
 		return;
 	}
-	ob_start(
-		function ( $html ) {
-			return preg_replace( '~(<h[1-6][^>]*>\s*)Fa(?:ç|&ccedil;|&#231;)a contato conosco(\s*</h[1-6]>)~iu', '$1Conheça nossos programas$2', $html );
-		}
-	);
+	ob_start( 'salekim_pp_sobre_trocar' );
+}
+
+function salekim_pp_sobre_trocar( $html ) {
+	if ( ! preg_match( '~(<h[1-6][^>]*>)\s*Fa(?:ç|&ccedil;|&#231;)a contato conosco\s*(</h[1-6]>)~iu', $html, $m, PREG_OFFSET_CAPTURE ) ) {
+		return $html;
+	}
+	$link   = home_url( '/portfolio/#ofertas' );
+	$titulo = $m[1][0] . '<a class="salekim-pp-link" href="' . esc_url( $link ) . '">Conheça nossos programas</a>' . $m[2][0];
+	$inicio = $m[0][1];
+	$depois = $inicio + strlen( $m[0][0] );
+
+	// Os botões ficam logo depois do título, ainda dentro do quadro: o trecho vai até o próximo título ou o rodapé.
+	$fim = strlen( $html );
+	if ( preg_match( '~<h[1-6][\s>]|<footer[\s>]~i', $html, $p, PREG_OFFSET_CAPTURE, $depois ) ) {
+		$fim = $p[0][1];
+	}
+	$trecho = substr( $html, $depois, $fim - $depois );
+	$trecho = preg_replace( '~<a\b[^>]*>\s*(?:<[^>]+>\s*)*(?:Pedir proposta para empresa|Ver os programas para pessoas)\s*(?:</[^>]+>\s*)*?</a>~iu', '', $trecho );
+	// Tira as caixas que ficaram vazias (onde estavam os botões).
+	do {
+		$trecho = preg_replace( '~<(div|p|span|li|ul)\b[^>]*class="[^"]*(?:button|botao|acoes)[^"]*"[^>]*>\s*</\1>|<p>\s*</p>~i', '', $trecho, -1, $quantos );
+	} while ( $quantos );
+
+	$estilo = '<style>.salekim-pp-link{color:inherit!important;text-decoration:none}.salekim-pp-link::after{content:" →"}.salekim-pp-link:hover{text-decoration:underline;text-underline-offset:.15em}</style>';
+	return substr( $html, 0, $inicio ) . $titulo . $trecho . $estilo . substr( $html, $fim );
 }
