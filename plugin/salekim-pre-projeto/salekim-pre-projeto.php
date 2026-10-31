@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
- * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.4.0
+ * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Troca o título e o texto da página Sobre. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
+ * Version:           1.5.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.4.0' );
+define( 'SALEKIM_PP_VERSAO', '1.5.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
@@ -89,7 +89,11 @@ function salekim_pp_sobre() {
 	if ( is_admin() || ! is_page( array( 'sobre', 'Sobre' ) ) ) {
 		return;
 	}
-	ob_start( 'salekim_pp_sobre_trocar' );
+	ob_start(
+		function ( $html ) {
+			return salekim_pp_sobre_texto( salekim_pp_sobre_trocar( $html ) );
+		}
+	);
 }
 
 function salekim_pp_sobre_trocar( $html ) {
@@ -294,4 +298,90 @@ function salekim_pp_pagina_vendas() {
 	header( 'Content-Type: text/html; charset=UTF-8' );
 	readfile( plugin_dir_path( __FILE__ ) . 'paginas/vida-apos-aposentadoria.html' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 	exit;
+}
+
+/* ---------- Página Sobre: título e texto novos ---------- */
+
+function salekim_pp_sobre_titulo() {
+	return 'Consultora comportamental há mais de 35 anos | Facilitadora de processos de mudança e transição para pessoas, equipes e organizações | Especialista em Processos Grupais (SBDG) | Mestre em Educação | Fundadora da SALEKIM';
+}
+
+function salekim_pp_sobre_conteudo() {
+	$p = function ( $texto ) {
+		return '<p>' . $texto . '</p>';
+	};
+	$lista = function ( $itens ) {
+		return '<ul class="credenciais"><li>' . implode( '</li><li>', $itens ) . '</li></ul>';
+	};
+
+	$sobre = '<h2>Sobre</h2>'
+		. $p( 'Comecei a carreira desenhando processos. Fui secretária e analista de Organização e Métodos numa siderúrgica, coordenadora de projetos em bancos, diretora administrativa de uma editora, gerente de Desenvolvimento Organizacional de uma construtora e gerente administrativa de um colégio particular.' )
+		. $p( 'Com cerca de 12 anos de carreira, o banco onde eu trabalhava foi liquidado. De um dia para o outro fiquei sem rumo, perguntando “e agora?”. Foi a minha primeira transição de verdade, e ninguém tinha me preparado para ela. Um convite me levou para Porto Alegre, onde os cargos de gestão me colocaram diante dos dilemas das pessoas nas organizações.' )
+		. $p( 'A virada veio na formação em processos grupais da SBDG. Ali entendi por que tantos processos, por mais bem desenhados que fossem, não se sustentavam: faltava cuidar das pessoas e dos grupos que iam executá-los. Uma mudança só se completa quando quem a vive consegue atravessar a própria transição.' )
+		. $p( 'Em 1990, no fim da formação, comecei a atuar como consultora comportamental independente, associada à JD Tonioli e Associados. Em 1996, fundei a SALEKIM Treinamento e Desenvolvimento. Desde então conduzo processos de mudança de cultura, desenvolvimento de equipes e liderança em empresas como Nestlé, Embraer, Vale, Faber-Castell, Roche e Metrô de São Paulo.' );
+
+	$como = '<h2>Como trabalho</h2>'
+		. $p( 'Atuo em três níveis:' )
+		. $lista(
+			array(
+				'<strong>Pessoas:</strong> transições de carreira, de papel e de fase da vida, incluindo a aposentadoria.',
+				'<strong>Grupos e equipes:</strong> processos grupais como integração, conflitos, liderança, comunicação e decisões.',
+				'<strong>Organizações:</strong> mudança de cultura que integra os aspectos psicossociais (subjetividade) aos resultados (objetividade).',
+			)
+		)
+		. $p( 'Hoje dedico parte do meu trabalho a quem está se aposentando, com o Método V.I.D.A., que trabalha ao mesmo tempo o plano de ação (objetividade) e o comportamento de quem vai vivê-lo (subjetividade).' );
+
+	$formacao = '<h2>Formação</h2>'
+		. $lista(
+			array(
+				'Mestre em Educação e graduada em Administração de Empresas pela Universidade Católica de Santos (UNISANTOS), onde integrei o grupo de pesquisa “Formação de Sujeitos: História, Cultura, Sociedade”.',
+				'Especialista em Processos Grupais pela SBDG (Sociedade Brasileira de Dinâmica dos Grupos), onde sou facilitadora didata, docente e ex-diretora, e conduzo grupos de formação desde 1998.',
+				'Executive Coach e Life Coach pelo ICI.',
+				'Formação em Psicoterapias Reichianas (abordagem que trabalha cognição, corpo e emoção juntos).',
+			)
+		)
+		. $p( 'Coautora do livro <em>Manual de Múltiplas Inteligências</em>, autora de artigos científicos e palestrante em congressos nacionais e internacionais de educação, processos grupais, psicoterapia, liderança e gestão.' );
+
+	$secao = function ( $interno ) {
+		return '<div class="wp-block-group secao texto-largo sk-sobre-texto">' . $interno . '</div>';
+	};
+	return $secao( $sobre ) . $secao( $como ) . $secao( $formacao )
+		. '<style>.salekim .sk-sobre-titulo{font-size:clamp(1.45rem,2.6vw,2.05rem);line-height:1.3}'
+		. '.sk-sobre-texto>*+*{margin-top:1rem}.sk-sobre-texto>h2+*{margin-top:1.1rem}.sk-sobre-texto .credenciais{margin-top:1rem}</style>';
+}
+
+/**
+ * Troca o título (h1) da página Sobre e substitui as seções de texto (da "A minha história" até
+ * "Nossos valores") pelo texto novo. A abertura com a foto e o quadro final ficam como estão.
+ */
+function salekim_pp_sobre_texto( $html ) {
+	// Título.
+	$html = preg_replace(
+		'~<h1([^>]*)>\s*Comecei desenhando processos\..*?</h1>~su',
+		'<h1$1 data-sk-titulo>' . esc_html( salekim_pp_sobre_titulo() ) . '</h1>',
+		$html,
+		1
+	);
+	$html = preg_replace( '~<h1([^>]*?)class="([^"]*)"([^>]*) data-sk-titulo>~', '<h1$1class="$2 sk-sobre-titulo"$3>', $html, 1, $com_classe );
+	if ( ! $com_classe ) {
+		$html = str_replace( ' data-sk-titulo>', ' class="sk-sobre-titulo">', $html );
+	}
+
+	// Seções antigas: do grupo com "A minha história" até o quadro final.
+	$marca = strpos( $html, 'A minha história' );
+	if ( false === $marca ) {
+		return $html;
+	}
+	$antes = substr( $html, 0, $marca );
+	if ( ! preg_match_all( '~<div\b[^>]*class="[^"]*\bwp-block-group\b[^"]*\bsecao\b[^"]*"[^>]*>~', $antes, $m, PREG_OFFSET_CAPTURE ) ) {
+		return $html;
+	}
+	$inicio = end( $m[0] )[1];
+
+	if ( ! preg_match( '~<div\b[^>]*class="[^"]*\bchamada\b[^"]*"[^>]*>~', $html, $c, PREG_OFFSET_CAPTURE, $marca ) ) {
+		return $html;
+	}
+	$fim = $c[0][1];
+
+	return substr( $html, 0, $inicio ) . salekim_pp_sobre_conteudo() . substr( $html, $fim );
 }
