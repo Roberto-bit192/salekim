@@ -3,7 +3,7 @@
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
  * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Troca o título e o texto da página Sobre. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.6.0
+ * Version:           1.7.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.6.0' );
+define( 'SALEKIM_PP_VERSAO', '1.7.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
