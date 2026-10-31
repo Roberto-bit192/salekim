@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
- * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo e foto da Genira com fundo transparente. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.0.0
+ * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
+ * Version:           1.1.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,18 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.0.0' );
+define( 'SALEKIM_PP_VERSAO', '1.1.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
 	return array(
-		'titulo'  => 'Pré-projeto',
-		'publico' => 'Destina-se a pessoas aposentadas, próximas à aposentadoria ou a quem quer se preparar com antecedência.',
-		'texto'   => array(
-			'Imagine chegar à aposentadoria com mais clareza sobre o que você quer preservar, experimentar e construir.',
+		'titulo' => 'Pré-projeto',
+		'texto'  => array(
 			'O Pré-Projeto Vida Após Aposentadoria ajuda você a organizar uma primeira visão da sua vida após a aposentadoria.',
+			'Destina-se a pessoas aposentadas, próximas à aposentadoria ou a quem quer se preparar com antecedência.',
 		),
-		'foto'    => plugin_dir_url( __FILE__ ) . 'img/genira-pre-projeto.webp',
 	);
 }
 
@@ -60,12 +58,10 @@ function salekim_pp_trocar( $html ) {
 	$fim    = false !== $abre ? $abre : strlen( $html );
 	$bloco  = substr( $html, $depois, $fim - $depois );
 
-	$bloco = preg_replace(
-		'~Para quem est(?:á|&aacute;|&#225;) se aposentando ou j(?:á|&aacute;|&#225;) se aposentou\.?~u',
-		esc_html( $t['publico'] ),
-		$bloco,
-		1
-	);
+	// A linha "Para quem está se aposentando…" sai: o texto novo já diz para quem é.
+	$publico = 'Para quem est(?:á|&aacute;|&#225;) se aposentando ou j(?:á|&aacute;|&#225;) se aposentou\.?';
+	$sem     = preg_replace( '~<(\w+)[^>]*>\s*(?:<(\w+)[^>]*>\s*)?' . $publico . '\s*(?:</\2>\s*)?</\1>~u', '', $bloco, 1, $quantos );
+	$bloco   = $quantos ? $sem : preg_replace( '~' . $publico . '~u', '', $bloco, 1 );
 	$bloco = preg_replace(
 		'#Quem se aposenta sem um plano.*?como\s+apoio\.?#su',
 		implode( '</p><p>', array_map( 'esc_html', $t['texto'] ) ),
@@ -73,17 +69,7 @@ function salekim_pp_trocar( $html ) {
 		1
 	);
 
-	$foto   = '<img class="salekim-pp-foto" src="' . esc_url( $t['foto'] ) . '" alt="Genira Rosa dos Santos" width="480" height="466" loading="lazy" decoding="async">';
-	$titulo = $foto . '<' . $nivel . $m[2][0] . '>' . esc_html( $t['titulo'] ) . '</' . $nivel . '>';
+	$titulo = '<' . $nivel . $m[2][0] . '>' . esc_html( $t['titulo'] ) . '</' . $nivel . '>';
 
 	return substr( $html, 0, $inicio ) . $titulo . $bloco . substr( $html, $fim );
-}
-
-add_action( 'wp_head', 'salekim_pp_estilo', 50 );
-
-function salekim_pp_estilo() {
-	echo '<style id="salekim-pre-projeto">'
-		. '.salekim-pp-foto{float:right;width:min(34%,190px);height:auto;margin:0 0 .75rem 1.25rem;shape-outside:url(' . esc_url( salekim_pp_textos()['foto'] ) . ');shape-margin:.5rem}'
-		. '@media (max-width:600px){.salekim-pp-foto{float:none;display:block;width:150px;margin:0 0 1rem}}'
-		. '</style>' . "\n";
 }
