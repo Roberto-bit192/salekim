@@ -3,7 +3,7 @@
  * Plugin Name:       SALEKIM Site
  * Plugin URI:        https://www.salekim.com.br
  * Description:       Monta o site da SALEKIM do começo ao fim: páginas, programas, serviços, formulários de proposta e de programas, WhatsApp, LGPD, SEO, Google Analytics e Meta Pixel. Tudo editável pelo painel.
- * Version:           2.1.0
+ * Version:           2.2.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_VERSAO', '2.1.0' );
+define( 'SALEKIM_VERSAO', '2.2.0' );
 define( 'SALEKIM_ARQUIVO', __FILE__ );
 define( 'SALEKIM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SALEKIM_URL', plugin_dir_url( __FILE__ ) );

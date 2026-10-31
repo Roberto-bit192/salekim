@@ -3,7 +3,7 @@ Contributors: salekim
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 
 Monta o site www.salekim.com.br do começo ao fim.
@@ -32,6 +32,10 @@ Nada é apagado: páginas antigas com o mesmo endereço ganham uma revisão ante
 Guia completo em LEIA-ME.md.
 
 == Changelog ==
+
+= 2.2.0 =
+* Bloco do Método VIDA vira "Pré-projeto", com texto novo e foto da Genira com fundo transparente.
+* Campo "Foto" nos programas.
 
 = 2.1.0 =
 * Botão "Saiba mais" nos programas, com link editável em SALEKIM > Programas.

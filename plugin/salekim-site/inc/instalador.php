@@ -296,6 +296,9 @@ function salekim_atualizar() {
 	if ( version_compare( $montada, '2.1.0', '<' ) ) {
 		$relatorio = array_merge( $relatorio, salekim_atualizar_2_1() );
 	}
+	if ( version_compare( $montada, '2.2.0', '<' ) ) {
+		$relatorio = array_merge( $relatorio, salekim_atualizar_2_2() );
+	}
 
 	update_option( 'salekim_versao_montada', SALEKIM_VERSAO );
 	if ( $relatorio ) {
@@ -353,4 +356,35 @@ function salekim_atualizar_2_1() {
 		$relatorio[] = 'Botão "Saiba mais" incluído no Método VIDA, levando à página ' . $p['titulo'] . '.';
 	}
 	return $relatorio;
+}
+
+/** 2.2: o bloco do Método VIDA vira "Pré-projeto", com texto novo e foto da Genira com fundo transparente. */
+function salekim_atualizar_2_2() {
+	$vida = get_posts(
+		array(
+			'post_type'      => 'sk_programa',
+			'post_status'    => 'any',
+			'meta_key'       => '_sk_chave', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_value'     => 'vida', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'posts_per_page' => 1,
+		)
+	);
+	if ( ! $vida ) {
+		return array();
+	}
+	$id = $vida[0]->ID;
+	// Guarda o título e o texto anteriores, caso seja preciso voltar.
+	update_post_meta( $id, '_sk_antes_2_2', array( 'titulo' => $vida[0]->post_title, 'texto' => $vida[0]->post_content, 'publico' => get_post_meta( $id, '_sk_publico', true ) ) );
+	wp_update_post(
+		wp_slash(
+			array(
+				'ID'           => $id,
+				'post_title'   => salekim_vida_titulo(),
+				'post_content' => salekim_vida_texto(),
+			)
+		)
+	);
+	update_post_meta( $id, '_sk_publico', salekim_vida_publico() );
+	update_post_meta( $id, '_sk_foto', salekim_vida_foto() );
+	return array( 'Bloco do Método VIDA atualizado para "Pré-projeto", com texto e foto novos.' );
 }

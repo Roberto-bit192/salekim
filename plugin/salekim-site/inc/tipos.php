@@ -97,6 +97,7 @@ function salekim_campos_tipo( $tipo ) {
 			'etiqueta' => array( 'Etiqueta', 'escolha', 'Destaque pequeno acima do nome.' ),
 			'botao'    => array( 'Texto do botão principal', 'texto', 'Ex.: Quero saber mais, Entrar na lista de espera, Quero participar.' ),
 			'link'     => array( 'Link externo do botão (opcional)', 'url', 'Ex.: página de vendas do VIDA na Hotmart. Em branco, o botão abre o formulário de programas com este programa já escolhido.' ),
+			'foto'     => array( 'Foto (opcional)', 'endereco', 'Endereço da imagem, de preferência com fundo transparente. Envie a imagem em Mídia, copie o link e cole aqui. Em branco, o programa aparece sem foto.' ),
 			'saiba_mais' => array( 'Link do botão "Saiba mais" (opcional)', 'endereco', 'Página com mais detalhes do programa, deste site (ex.: /pre-projeto-vida/) ou de outro. Em branco, o botão não aparece.' ),
 			'whatsapp' => array( 'Mostrar botão "Conversar pelo WhatsApp"', 'marcar', 'A conversa já abre com o nome do programa.' ),
 		),

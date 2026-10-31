@@ -107,9 +107,14 @@ function salekim_sc_programas() {
 		$link     = get_post_meta( $p->ID, '_sk_link', true );
 		$whats    = '1' === get_post_meta( $p->ID, '_sk_whatsapp', true );
 		$mais     = salekim_endereco( get_post_meta( $p->ID, '_sk_saiba_mais', true ) );
+		$foto     = salekim_endereco( get_post_meta( $p->ID, '_sk_foto', true ) );
 		$botao    = $botao ? $botao : 'Quero saber mais';
 
-		$out .= '<article class="programa" id="' . esc_attr( $p->post_name ) . '"><div class="programa-texto">';
+		$out .= '<article class="programa' . ( $foto ? ' com-foto' : '' ) . '" id="' . esc_attr( $p->post_name ) . '">';
+		if ( $foto ) {
+			$out .= '<figure class="programa-foto"><img src="' . esc_url( $foto ) . '" alt="" loading="lazy" decoding="async"></figure>';
+		}
+		$out .= '<div class="programa-texto">';
 		if ( $etiqueta ) {
 			$out .= '<span class="etiqueta">' . esc_html( $etiqueta ) . '</span>';
 		}

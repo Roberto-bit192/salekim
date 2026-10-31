@@ -493,12 +493,30 @@ function salekim_servicos_padrao() {
 
 /* ---------- Programas para pessoas ---------- */
 
+/** Bloco do Pré-projeto (antes "Método VIDA") na lista de programas e ofertas. */
+function salekim_vida_titulo() {
+	return 'Pré-projeto';
+}
+
+function salekim_vida_publico() {
+	return 'Destina-se a pessoas aposentadas, próximas à aposentadoria ou a quem quer se preparar com antecedência.';
+}
+
+function salekim_vida_texto() {
+	return "Imagine chegar à aposentadoria com mais clareza sobre o que você quer preservar, experimentar e construir.\n\nO Pré-Projeto Vida Após Aposentadoria ajuda você a organizar uma primeira visão da sua vida após a aposentadoria.";
+}
+
+function salekim_vida_foto() {
+	return SALEKIM_URL . 'assets/img/genira-pre-projeto.webp';
+}
+
 function salekim_programas_padrao() {
 	return array(
 		'vida'        => array(
-			'titulo'    => 'Método VIDA',
-			'publico'   => 'Para quem está se aposentando ou já se aposentou.',
-			'texto'     => 'Quem se aposenta sem um plano costuma passar os primeiros anos preenchendo o tempo em vez de escolher o que fazer com ele. Em 45 dias, você sai com um plano de vida para essa fase: o que fazer com o seu tempo, a sua renda e o seu propósito. São 8 encontros guiados pelas etapas visão, identidade, direção e ação, com o caderno de jornada como apoio.',
+			'titulo'    => salekim_vida_titulo(),
+			'publico'   => salekim_vida_publico(),
+			'texto'     => salekim_vida_texto(),
+			'foto'      => salekim_vida_foto(),
 			'etiqueta'  => 'Inscrições abertas',
 			'botao'     => 'Quero participar',
 			'link'      => '',
