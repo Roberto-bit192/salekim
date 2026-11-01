@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SALEKIM Pré-projeto
  * Plugin URI:        https://www.salekim.com.br
- * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Troca o título e o texto da página Sobre. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
- * Version:           1.7.0
+ * Description:       Troca o bloco "Método VIDA" das listas de programas (Portfólio e Programas) pelo "Pré-projeto", com texto novo, e troca a chamada final da página Sobre por um título "Conheça nossos programas" que leva às ofertas do Portfólio. Acrescenta o bloco "Programa Vida após a aposentadoria", com a página de vendas em /vida-apos-aposentadoria/. Troca o título e o texto da página Sobre. Cria a página Conteúdos diversos, com vídeo. Funciona junto com o plugin SALEKIM Site, sem substituí-lo. Para voltar ao bloco antigo, basta desativar este plugin.
+ * Version:           1.8.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Author:            SALEKIM Treinamento e Desenvolvimento Ltda.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SALEKIM_PP_VERSAO', '1.7.0' );
+define( 'SALEKIM_PP_VERSAO', '1.8.0' );
 
 /** Textos do bloco. Para mudar, edite aqui. */
 function salekim_pp_textos() {
@@ -505,4 +505,50 @@ function salekim_pp_contem( $pai, $filho ) {
 /** HTML simples das seções novas em XML válido, para o DOM. */
 function salekim_pp_xml( $html ) {
 	return str_replace( '&nbsp;', '&#160;', $html );
+}
+
+/* ---------- Página Conteúdos diversos ---------- */
+
+/**
+ * Cria uma vez a página "Conteúdos diversos" com o vídeo do YouTube. Depois de criada, ela é uma
+ * página comum do WordPress: dá para editar, acrescentar vídeos ou apagar em Páginas, e o plugin não a recria.
+ */
+add_action( 'init', 'salekim_pp_conteudos', 30 );
+
+function salekim_pp_conteudos() {
+	if ( get_option( 'salekim_pp_conteudos' ) ) {
+		return;
+	}
+	$existente = get_page_by_path( 'conteudos-diversos', OBJECT, 'page' );
+	if ( $existente && 'trash' !== $existente->post_status ) {
+		update_option( 'salekim_pp_conteudos', (int) $existente->ID );
+		return;
+	}
+	// O vídeo é um <iframe>: o filtro de segurança do WordPress o tiraria quando ninguém está logado.
+	kses_remove_filters();
+	$id = wp_insert_post(
+		wp_slash(
+			array(
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_title'   => 'Conteúdos diversos',
+				'post_name'    => 'conteudos-diversos',
+				'post_content' => salekim_pp_video_bloco( 'lh1tLbZjo1M' ),
+			)
+		),
+		true
+	);
+	kses_init();
+	if ( ! is_wp_error( $id ) ) {
+		update_option( 'salekim_pp_conteudos', (int) $id );
+	}
+}
+
+/** Vídeo do YouTube em bloco HTML, responsivo e sem cookies de rastreamento até o play. */
+function salekim_pp_video_bloco( $video ) {
+	$src = 'https://www.youtube-nocookie.com/embed/' . rawurlencode( $video ) . '?rel=0';
+	return "<!-- wp:html -->\n"
+		. '<div class="sk-video" style="position:relative;width:100%;max-width:880px;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000">'
+		. '<iframe src="' . esc_url( $src ) . '" title="Vídeo da SALEKIM" style="position:absolute;inset:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+		. "</div>\n<!-- /wp:html -->\n";
 }
